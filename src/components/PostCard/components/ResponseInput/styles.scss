@@ -1,0 +1,25 @@
+.responseInput {
+  display: flex;
+  margin: 0 auto;
+  margin-bottom: 25px;
+  position: relative;
+  height: 100%;
+  padding: 0 20px 20px 20px;
+
+  &-btn {
+    position: absolute !important;
+    min-width: 50px !important;
+    height: 50px;
+    top: 0;
+    right: 20px;
+
+    & img {
+      width: 60%;
+      height: 60%;
+    }
+
+    &.check {
+      right: 70px;
+    }
+  }
+}

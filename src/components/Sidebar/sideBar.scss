@@ -1,0 +1,123 @@
+.sideBar {
+  &_container {
+    & nav {
+      box-shadow: 0 6px 18px 0 rgb(32 32 149 / 10%);
+      border-radius: 15px;
+      padding: 0;
+      position: sticky;
+      top: 115px;
+    }
+  }
+
+  &_nav {
+    &-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 20px;
+
+      color: #374957;
+
+      &:hover {
+        background-color: #f7f7f7;
+      }
+
+      & img {
+        width: 10%;
+        height: 10%;
+      }
+    }
+
+    &-list {
+      & a {
+        &.active {
+          & li {
+            position: relative;
+            &:before {
+              content: "";
+              position: absolute;
+              top: 0;
+              left: 0;
+              width: 8px;
+              height: 100%;
+              background-color: #ff4546;
+            }
+          }
+        }
+
+        &.active:first-child {
+          & li {
+            position: relative;
+            &:before {
+              content: "";
+              position: absolute;
+              top: 0;
+              left: 0;
+              width: 8px;
+              height: 100%;
+              background-color: #ff4546;
+              border-radius: 15px 0 0 0;
+            }
+          }
+        }
+
+        &.active:last-child {
+          & li {
+            position: relative;
+            &:before {
+              content: "";
+              position: absolute;
+              top: 0;
+              left: 0;
+              width: 8px;
+              height: 100%;
+              background-color: #ff4546;
+              border-radius: 0 0 0 15px;
+            }
+          }
+        }
+
+        &:first-child {
+          & li {
+            border-radius: 15px 15px 0 0;
+          }
+        }
+        &:last-child {
+          & li {
+            border-radius: 0 0 15px 15px;
+          }
+        }
+      }
+    }
+  }
+}
+
+#speedDial-actions {
+  & button {
+    background-color: #fff;
+  }
+}
+//responsive--------------------------
+@media (max-width: 850px) {
+  .sideBar {
+    &_container {
+      & nav {
+        margin: 0 auto;
+        width: 60%;
+      }
+    }
+
+    &_nav {
+      &-item {
+        justify-content: center;
+        & span {
+          display: none;
+        }
+
+        & img {
+          width: 45%;
+        }
+      }
+    }
+  }
+}

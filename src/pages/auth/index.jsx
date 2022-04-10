@@ -1,5 +1,6 @@
-import React from "react";
-import { NavLink, Route, Routes } from "react-router-dom";
+import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { NavLink, Route, Routes, useNavigate } from "react-router-dom";
 
 import authBanner from "../../assets/authBanner.jpg";
 import vluLogo from "../../assets/vluLogo.png";
@@ -8,6 +9,13 @@ import RegisterForm from "./components/RegisterForm";
 import "./styles.scss";
 
 const AuthPage = () => {
+  const user = useSelector((state) => state.auth.user);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    user !== null && navigate("/");
+  }, []);
+
   return (
     <div className="background-main d-flex justify-content-center align-items-center">
       <div className="auth-form_container">

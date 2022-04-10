@@ -1,0 +1,281 @@
+$button-bg: #ff4546;
+.postCard {
+  margin-bottom: 25px;
+  box-shadow: 0 6px 18px 0 rgba(32, 32, 149, 0.102);
+  width: 90%;
+  margin: 0 auto;
+  border-radius: 20px;
+
+  margin-bottom: 25px;
+  position: relative;
+
+  &-follow {
+    position: absolute;
+    top: 20px;
+    right: 25px;
+    padding: 10px 10px;
+    cursor: pointer;
+
+    & img {
+      width: 25px;
+      height: 25px;
+    }
+
+    transition: all 0.2s ease-in-out;
+    &:hover {
+      opacity: 0.8;
+      background-color: #f5f5f5;
+      border-radius: 50%;
+    }
+
+    &:before,
+    &:after {
+      position: absolute;
+      content: "";
+      display: block;
+      width: 140%;
+      height: 100%;
+      left: -20%;
+      z-index: -1000;
+      transition: all ease-in-out 0.5s;
+      background-repeat: no-repeat;
+    }
+
+    &:before {
+      display: none;
+      top: -75%;
+      background-image: radial-gradient(circle, $button-bg 20%, transparent 20%),
+        radial-gradient(
+          circle,
+          transparent 20%,
+          $button-bg 20%,
+          transparent 30%
+        ),
+        radial-gradient(circle, $button-bg 20%, transparent 20%),
+        radial-gradient(circle, $button-bg 20%, transparent 20%),
+        radial-gradient(
+          circle,
+          transparent 10%,
+          $button-bg 15%,
+          transparent 20%
+        ),
+        radial-gradient(circle, $button-bg 20%, transparent 20%),
+        radial-gradient(circle, $button-bg 20%, transparent 20%),
+        radial-gradient(circle, $button-bg 20%, transparent 20%),
+        radial-gradient(circle, $button-bg 20%, transparent 20%);
+      background-size: 10% 10%, 20% 20%, 15% 15%, 20% 20%, 18% 18%, 10% 10%,
+        15% 15%, 10% 10%, 18% 18%;
+      //background-position: 0% 80%, -5% 20%, 10% 40%, 20% 0%, 30% 30%, 22% 50%, 50% 50%, 65% 20%, 85% 30%;
+    }
+
+    &:after {
+      display: none;
+      bottom: -75%;
+      background-image: radial-gradient(circle, $button-bg 20%, transparent 20%),
+        radial-gradient(circle, $button-bg 20%, transparent 20%),
+        radial-gradient(
+          circle,
+          transparent 10%,
+          $button-bg 15%,
+          transparent 20%
+        ),
+        radial-gradient(circle, $button-bg 20%, transparent 20%),
+        radial-gradient(circle, $button-bg 20%, transparent 20%),
+        radial-gradient(circle, $button-bg 20%, transparent 20%),
+        radial-gradient(circle, $button-bg 20%, transparent 20%);
+      background-size: 15% 15%, 20% 20%, 18% 18%, 20% 20%, 15% 15%, 10% 10%,
+        20% 20%;
+      //background-position: 5% 90%, 10% 90%, 10% 90%, 15% 90%, 25% 90%, 25% 90%, 40% 90%, 55% 90%, 70% 90%;
+    }
+
+    &:active {
+      transform: scale(0.9);
+      background-color: darken($button-bg, 5%);
+      box-shadow: 0 2px 25px rgba(255, 0, 130, 0.2);
+    }
+
+    &.animate {
+      &:before {
+        display: block;
+        animation: topBubbles ease-in-out 0.75s forwards;
+      }
+      &:after {
+        display: block;
+        animation: bottomBubbles ease-in-out 0.75s forwards;
+      }
+    }
+  }
+
+  &-inner {
+    padding: 25px;
+    padding-bottom: 10px;
+    display: flex;
+    gap: 20px;
+  }
+
+  &-votes {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 5px;
+
+    & img {
+      width: 30px;
+      height: 30px;
+      color: red;
+    }
+
+    &_count {
+      font-weight: 500;
+      font-size: 20px;
+      cursor: default;
+    }
+  }
+
+  &-content {
+    width: 100%;
+
+    &_header {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 20px;
+
+      & img {
+        width: 50px;
+        height: 50px;
+        border-radius: 10px;
+      }
+
+      &--userInfo {
+        & p {
+          &:first-child {
+            font-weight: 500;
+            font-size: 20px;
+            margin-bottom: 5px;
+          }
+          &:last-child {
+            font-size: 13px;
+            font-weight: 400;
+            color: #8c8c8c;
+          }
+        }
+      }
+    }
+
+    &_body {
+      & p {
+        font-size: 16px;
+        line-height: 1.5;
+        margin-bottom: 20px;
+      }
+
+      &--counts {
+        display: flex;
+        align-items: center;
+
+        & p {
+          font-size: 14px;
+          color: #8c8c8c;
+        }
+
+        &_item {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: 8px;
+          padding: 10px 10px !important;
+          border-radius: 10px;
+
+          & img {
+            width: 25px;
+            height: 25px;
+          }
+
+          & span {
+            font-size: 14px;
+            font-weight: 500;
+            color: #968e8e;
+          }
+
+          &.answered {
+            background-color: #82ff8fc0;
+            padding: 10px 10px;
+            border-radius: 10px;
+            & span {
+              color: #39bb8b;
+            }
+          }
+
+          transition: all 0.2s ease-in-out;
+          &:hover {
+            background-color: #f5f5f5;
+            cursor: pointer;
+          }
+        }
+      }
+    }
+  }
+}
+
+@keyframes topBubbles {
+  0% {
+    background-position: 5% 90%, 10% 90%, 10% 90%, 15% 90%, 25% 90%, 25% 90%,
+      40% 90%, 55% 90%, 70% 90%;
+  }
+  50% {
+    background-position: 0% 80%, 0% 20%, 10% 40%, 20% 0%, 30% 30%, 22% 50%,
+      50% 50%, 65% 20%, 90% 30%;
+  }
+  100% {
+    background-position: 0% 70%, 0% 10%, 10% 30%, 20% -10%, 30% 20%, 22% 40%,
+      50% 40%, 65% 10%, 90% 20%;
+    background-size: 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%;
+  }
+}
+
+@keyframes bottomBubbles {
+  0% {
+    background-position: 10% -10%, 30% 10%, 55% -10%, 70% -10%, 85% -10%,
+      70% -10%, 70% 0%;
+  }
+  50% {
+    background-position: 0% 80%, 20% 80%, 45% 60%, 60% 100%, 75% 70%, 95% 60%,
+      105% 0%;
+  }
+  100% {
+    background-position: 0% 90%, 20% 90%, 45% 70%, 60% 110%, 75% 80%, 95% 70%,
+      110% 10%;
+    background-size: 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%;
+  }
+}
+
+.upvote-icon {
+  transform: rotate(90deg);
+  cursor: pointer;
+}
+
+.downvote-icon {
+  transform: rotate(-90deg);
+  cursor: pointer;
+}
+
+.trash-icon {
+  cursor: pointer;
+  padding: 2px;
+
+  transition: all 0.2s ease-in-out;
+  &:hover {
+    box-shadow: 0 0 0 5px #f7f7f7;
+    border-radius: 50%;
+    background-color: #f7f7f7;
+  }
+}
+
+.tab-pane {
+  padding: 0 20px;
+
+  &.active {
+    padding-bottom: 20px;
+  }
+}

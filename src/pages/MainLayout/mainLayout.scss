@@ -1,0 +1,40 @@
+.main {
+  display: flex;
+
+  & .page-content {
+    width: 80%;
+  }
+
+  & .sideBar_container {
+    width: 20%;
+
+    & div {
+      opacity: 0;
+      visibility: hidden;
+
+      & button {
+        background-color: #ff4546;
+      }
+    }
+  }
+}
+
+@media (max-width: 700px) {
+  .main {
+    flex-wrap: wrap;
+    & .sideBar_container {
+      & nav {
+        display: none;
+      }
+
+      & div {
+        opacity: 1;
+        visibility: visible;
+      }
+    }
+
+    & .page-content {
+      width: 100%;
+    }
+  }
+}

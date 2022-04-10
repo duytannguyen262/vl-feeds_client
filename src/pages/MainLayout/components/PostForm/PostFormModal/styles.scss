@@ -1,0 +1,56 @@
+.postForm_modal {
+  max-width: 800px;
+
+  &-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid rgb(138, 137, 137);
+    margin-bottom: 20px;
+
+    &-title {
+      & h2 {
+        font-size: 20px;
+        font-weight: 500;
+        color: #7d7d7d;
+      }
+    }
+  }
+
+  &-close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    cursor: pointer;
+    padding: 15px 15px;
+
+    & button {
+      border-radius: 50%;
+      padding: 20px 0;
+
+      &:hover {
+        background-color: #f5f5f5;
+      }
+    }
+
+    & img {
+      width: 20px;
+      height: 20px;
+    }
+  }
+  &_text-area {
+    & textarea {
+      resize: none;
+      background-color: #f4f4f4;
+      border: none;
+      border-radius: 10px;
+      padding: 10px 20px;
+
+      &:focus {
+        border: inherit;
+        box-shadow: none;
+      }
+    }
+  }
+}

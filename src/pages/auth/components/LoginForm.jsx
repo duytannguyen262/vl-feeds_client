@@ -1,18 +1,53 @@
+import { useMutation } from "@apollo/client";
 import { FastField, Form, Formik } from "formik";
-import React from "react";
 import * as Yup from "yup";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Alert, Spinner } from "reactstrap";
+import gql from "graphql-tag";
+import { useDispatch } from "react-redux";
+import { login } from "../authSlice";
+
 import logo from "../../../assets/logo.png";
 import office from "../../../assets/office.svg";
 import InputField from "../../../custom-fields/InputField";
 import "./styles.scss";
 
 const LoginForm = () => {
+  const [values, setValues] = useState({
+    userName: "",
+    password: "",
+  });
+
+  const [errors, setErrors] = useState({});
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const validate = Yup.object({
     userName: Yup.string()
       .max(15, "Chỉ nhập tối đa 15 kí tự")
       .required("Tên đăng nhập không được để trống"),
     password: Yup.string().required("Mật khẩu không được để trống"),
   });
+
+  const [loginUser, { loading }] = useMutation(LOGIN_USER, {
+    update(_, { data: { login: userData } }) {
+      localStorage.setItem("jwtToken", userData.token);
+      const action = login(userData);
+      dispatch(action);
+      navigate("/");
+    },
+    onError(err) {
+      setErrors(err.graphQLErrors[0].extensions.errors);
+    },
+  });
+
+  const submitForm = async (newValues) => {
+    await loginUser({
+      variables: newValues,
+    });
+  };
+
   return (
     <>
       <div style={{ width: "90%" }}>
@@ -22,13 +57,9 @@ const LoginForm = () => {
 
         <h1 className="login-form_header">Đăng nhập</h1>
         <Formik
-          initialValues={{
-            userName: "",
-            password: "",
-            rememberMe: false,
-          }}
+          initialValues={values}
           validationSchema={validate}
-          onSubmit={(values) => console.log(values)}
+          onSubmit={submitForm}
         >
           {(formik) => {
             return (
@@ -48,25 +79,20 @@ const LoginForm = () => {
                   type="password"
                 />
 
-                <div className="form-check">
-                  <input
-                    className="form-check-input"
-                    type="checkbox"
-                    value=""
-                    id="flexCheckDefault"
-                  />
-                  <label
-                    className="form-check-label py-1"
-                    for="flexCheckDefault"
-                  >
-                    Ghi nhớ mật khẩu
-                  </label>
-                </div>
-
                 <button type="submit" className="btn login-btn">
-                  Đăng nhập
+                  {loading ? (
+                    <Spinner style={{ color: "white" }} />
+                  ) : (
+                    "Đăng nhập"
+                  )}
                 </button>
-
+                {Object.keys(errors).length > 0 && (
+                  <Alert color="danger" className="my-4">
+                    {Object.values(errors).map((value) => (
+                      <p key={value}>{value}</p>
+                    ))}
+                  </Alert>
+                )}
                 <div className="login-form_strikethru-text">
                   <span>Hoặc</span>
                 </div>
@@ -82,5 +108,19 @@ const LoginForm = () => {
     </>
   );
 };
+
+const LOGIN_USER = gql`
+  mutation login($userName: String!, $password: String!) {
+    login(username: $userName, password: $password) {
+      id
+      email
+      username
+      createdAt
+      token
+      avatar
+      role
+    }
+  }
+`;
 
 export default LoginForm;

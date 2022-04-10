@@ -1,16 +1,42 @@
 import { React, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button, Collapse, Input } from "reactstrap";
+import { useDispatch, useSelector } from "react-redux";
+import { Menu, MenuItem } from "@mui/material";
 
 import logo from "../../assets/logo.png";
 import searchIcon from "../../assets/icons/search-outline 1.svg";
+import userImg from "../../assets/user.png";
+import angleSmallImg from "../../assets/icons/angle-small-right.svg";
+import { logout } from "../../pages/auth/authSlice";
 
 import "./styles.scss";
 
 const TopBar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const user = useSelector((state) => state.auth.user);
+  const dispatch = useDispatch();
   const toggle = () => setIsOpen(!isOpen);
+  const [anchorElUser, setAnchorElUser] = useState(null);
 
+  const navigate = useNavigate();
+  const open = Boolean(anchorElUser);
+
+  const handleOpenUserMenu = (event) => {
+    setAnchorElUser(event.currentTarget);
+  };
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("jwtToken");
+    localStorage.removeItem("persist:root");
+    const action = logout();
+    dispatch(action);
+    navigate("/");
+  };
   return (
     <>
       <div className="topBar">
@@ -31,11 +57,38 @@ const TopBar = () => {
         </div>
 
         <div className="topBar-account">
-          <div className="topBar-account_unauth">
-            <Link to="/auth/login">Đăng nhập</Link>
-            <span> / </span>
-            <Link to="/auth/register">Đăng kí</Link>
-          </div>
+          {user !== null ? (
+            <div className="topBar-account_authed">
+              <div onClick={handleOpenUserMenu}>
+                <img src={angleSmallImg} alt="" className="profile-more_img" />
+                <h3>{user.username}</h3>
+                <img src={user.avatar ? user.avatar : userImg} alt="" />
+              </div>
+              <Menu
+                anchorEl={anchorElUser}
+                open={open}
+                onClose={handleCloseUserMenu}
+                MenuListProps={{
+                  "aria-labelledby": "basic-button",
+                }}
+              >
+                <MenuItem
+                  onClick={() => {
+                    navigate("/profile");
+                  }}
+                >
+                  Trang cá nhân
+                </MenuItem>
+                <MenuItem onClick={handleLogout}>Đăng xuất</MenuItem>
+              </Menu>
+            </div>
+          ) : (
+            <div className="topBar-account_unauth">
+              <Link to="/auth/login">Đăng nhập</Link>
+              <span> / </span>
+              <Link to="/auth/register">Đăng kí</Link>
+            </div>
+          )}
         </div>
         <Collapse className="topBar-search_mobile--input" isOpen={isOpen}>
           <Input type="text" placeholder="Tìm kiếm" />

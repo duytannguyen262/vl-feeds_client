@@ -1,0 +1,20 @@
+.post_comment_text-area {
+  width: 100%;
+
+  & textarea {
+    width: 100%;
+    resize: none;
+
+    background-color: #f4f4f4;
+    border: none;
+    border-radius: 10px;
+
+    padding: 15px;
+
+    transition: all 0.2s ease-in-out;
+    &:focus {
+      outline: none;
+      background-color: #f6fafd;
+    }
+  }
+}
