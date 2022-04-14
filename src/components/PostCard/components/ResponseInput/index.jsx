@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
+
 import { Button, Tooltip } from "@mui/material";
 import { FastField, Form, Formik } from "formik";
 import gql from "graphql-tag";
@@ -9,13 +10,9 @@ import PostCommentField from "../../../../custom-fields/PostCommentField";
 import PaperPlaneIcon from "../../../../assets/icons/paper-plane.svg";
 import shieldCheckIcon from "../../../../assets/icons/shield-check.svg";
 import "./styles.scss";
-import { FETCH_POST_COMMENTS } from "../../../../util/graphql";
 
 const ResponseInput = ({ postId }) => {
   const user = useSelector((state) => state.auth.user);
-  const [values, setValues] = useState({
-    response: "",
-  });
 
   const [submitComment] = useMutation(CREATE_COMMENT_MUTATION, {
     update() {},
@@ -47,7 +44,11 @@ const ResponseInput = ({ postId }) => {
   return (
     <>
       {user && (
-        <Formik initialValues={values}>
+        <Formik
+          initialValues={{
+            response: "",
+          }}
+        >
           {(formik) => {
             const { handleChange, handleBlur, values } = formik;
             return (

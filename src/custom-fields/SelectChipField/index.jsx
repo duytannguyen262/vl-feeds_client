@@ -33,7 +33,6 @@ const SelectChipField = (props) => {
     const {
       target: { value },
     } = event;
-    console.log(value);
     setCategory(typeof value === "string" ? value.split(",") : value);
   };
 

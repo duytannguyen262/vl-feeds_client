@@ -12,6 +12,16 @@ import PostForm from "../PostForm";
 import "./styles.scss";
 import SkeletonPost from "../../../../components/SkeletonPost";
 const FollowedPosts = () => {
+  const defaultOptions = {
+    loop: true,
+    autoplay: true,
+    animationData: thinkingAni,
+    rendererSettings: {
+      preserveAspectRatio: "xMidYMid slice",
+    },
+  };
+  const { View } = useLottie(defaultOptions);
+
   const user = useSelector((state) => state.auth.user);
   const { loading, data, refetch } = useQuery(FETCH_FOLLOWED_POSTS, {
     variables: {
@@ -22,16 +32,6 @@ const FollowedPosts = () => {
   useEffect(() => {
     refetch();
   }, []);
-
-  const defaultOptions = {
-    loop: true,
-    autoplay: true,
-    animationData: thinkingAni,
-    rendererSettings: {
-      preserveAspectRatio: "xMidYMid slice",
-    },
-  };
-  const { View } = useLottie(defaultOptions);
 
   return (
     <div className="page-content">

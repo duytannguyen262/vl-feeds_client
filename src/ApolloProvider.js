@@ -1,18 +1,14 @@
 import React from "react";
 import App from "./App";
-import {
-  ApolloClient,
-  InMemoryCache,
-  createHttpLink,
-  ApolloProvider,
-} from "@apollo/client";
+import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
+import { createUploadLink } from "apollo-upload-client";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { persistor, store } from "./app/store";
 import { setContext } from "apollo-link-context";
 
-const httpLink = createHttpLink({
-  uri: "http://localhost:5000",
+const uploadLink = createUploadLink({
+  uri: "http://localhost:5000/graphql",
 });
 
 const authLink = setContext(() => {
@@ -63,7 +59,7 @@ const cache = new InMemoryCache({
 });
 
 const client = new ApolloClient({
-  link: authLink.concat(httpLink),
+  link: authLink.concat(uploadLink),
   cache: cache,
 });
 

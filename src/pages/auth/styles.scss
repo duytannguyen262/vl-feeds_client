@@ -19,16 +19,14 @@
 
     & img {
       &:first-child {
-        width: 100%;
-        height: 100%;
-
         border-radius: 10px 0 0 10px;
       }
       &:last-child {
         position: absolute;
         top: 10px;
         left: 10px;
-        width: 20%;
+        width: 30%;
+        height: auto;
       }
     }
   }

@@ -6,6 +6,8 @@ import { Menu, MenuItem } from "@mui/material";
 
 import logo from "../../assets/logo.png";
 import searchIcon from "../../assets/icons/search-outline 1.svg";
+import userIcon from "../../assets/icons/user.svg";
+import logOutIcon from "../../assets/icons/sign-out.svg";
 import userImg from "../../assets/user.png";
 import angleSmallImg from "../../assets/icons/angle-small-right.svg";
 import { logout } from "../../pages/auth/authSlice";
@@ -71,15 +73,24 @@ const TopBar = () => {
                 MenuListProps={{
                   "aria-labelledby": "basic-button",
                 }}
+                style={{ transform: "translateX(-20px)" }}
               >
                 <MenuItem
                   onClick={() => {
                     navigate("/profile");
                   }}
+                  className="topBar-account_menu-item"
                 >
-                  Trang cá nhân
+                  <img src={userIcon} alt="" />
+                  <span>Tài khoản</span>
                 </MenuItem>
-                <MenuItem onClick={handleLogout}>Đăng xuất</MenuItem>
+                <MenuItem
+                  onClick={handleLogout}
+                  className="topBar-account_menu-item"
+                >
+                  <img src={logOutIcon} alt="" />
+                  <span>Đăng xuất</span>
+                </MenuItem>
               </Menu>
             </div>
           ) : (

@@ -26,7 +26,6 @@ const Home = () => {
       ) : (
         data.getPosts &&
         data.getPosts.map((post) => {
-          console.log(post.reputationsCount);
           if (post.reputationsCount >= 1 && post.answers.length === 0) {
             return <PostCard post={post} key={post.id} />;
           }

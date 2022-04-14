@@ -121,6 +121,7 @@ const CREATE_POST_MUTATION = gql`
       votesCount
       devotesCount
       categories
+      reputationsCount
       votes {
         createdAt
         username

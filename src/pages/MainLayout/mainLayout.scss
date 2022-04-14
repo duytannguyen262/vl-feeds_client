@@ -2,7 +2,7 @@
   display: flex;
 
   & .page-content {
-    width: 80%;
+    flex: 4;
   }
 
   & .sideBar_container {
@@ -23,6 +23,7 @@
   .main {
     flex-wrap: wrap;
     & .sideBar_container {
+      width: 0;
       & nav {
         display: none;
       }
