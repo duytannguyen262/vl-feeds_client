@@ -1,8 +1,8 @@
 import React from "react";
 
 const InputField = (props) => {
-  const { field, form, type, label, placeholder } = props;
-  const { name, value, onChange, onBlur } = field;
+  const { field, form, label } = props;
+  const { name } = field;
   const { errors, touched } = form;
   const showError = errors[name] && touched[name];
   return (

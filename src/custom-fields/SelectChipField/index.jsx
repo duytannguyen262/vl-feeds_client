@@ -22,10 +22,10 @@ const categories = [
 ];
 
 const SelectChipField = (props) => {
-  const { field, form, type, label } = props;
-  const { name, value, onChange, onBlur } = field;
-  const { errors, touched } = form;
-  const showError = errors[name] && touched[name];
+  const { field, label } = props;
+  //const { name } = field;
+  //const { errors, touched } = form;
+  //const showError = errors[name] && touched[name];
 
   const [category, setCategory] = React.useState([]);
 

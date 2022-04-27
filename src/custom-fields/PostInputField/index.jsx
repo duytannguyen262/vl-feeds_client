@@ -1,11 +1,11 @@
 import { TextareaAutosize } from "@mui/material";
-import React, { useState } from "react";
+import React from "react";
 
 const PostInputField = (props) => {
-  const { field, form, type, placeholder } = props;
-  const { name, value, onChange, onBlur } = field;
-  const { errors, touched } = form;
-  const showError = errors[name] && touched[name];
+  const { field } = props;
+  //const { name } = field;
+  //const { errors, touched } = form;
+  //const showError = errors[name] && touched[name];
 
   return (
     <div className="postForm_modal_text-area mb-3">

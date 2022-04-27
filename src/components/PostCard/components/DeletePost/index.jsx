@@ -12,10 +12,7 @@ import {
 import gql from "graphql-tag";
 import React from "react";
 import trashIcon from "../../../../assets/icons/trash.svg";
-import {
-  FETCH_POSTS_PAGINATION,
-  FETCH_POSTS_QUERY,
-} from "../../../../util/graphql";
+import { FETCH_POSTS_QUERY } from "../../../../util/graphql";
 
 const style = {
   position: "absolute",
