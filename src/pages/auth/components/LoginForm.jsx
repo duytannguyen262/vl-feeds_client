@@ -9,7 +9,6 @@ import { useDispatch } from "react-redux";
 import { login } from "../authSlice";
 
 import logo from "../../../assets/logo.png";
-import office from "../../../assets/office.svg";
 import InputField from "../../../custom-fields/InputField";
 import "./styles.scss";
 
@@ -35,6 +34,10 @@ const LoginForm = () => {
       localStorage.setItem("jwtToken", userData.token);
       const action = login(userData);
       dispatch(action);
+      setValues({
+        userName: "",
+        password: "",
+      });
       navigate("/");
     },
     onError(err) {

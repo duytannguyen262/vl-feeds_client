@@ -55,6 +55,12 @@ const RegisterForm = () => {
     await addUser({
       variables: newValues,
     });
+    setValues({
+      userName: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    });
   };
 
   return (

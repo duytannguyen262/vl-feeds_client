@@ -71,7 +71,10 @@ const PostFormModal = React.forwardRef((props, ref) => {
           getPosts: [result.data.createPost, ...data.getPosts],
         },
       });
-
+      setValues({
+        body: "",
+        categories: [],
+      });
       setOpen(false);
     },
   });

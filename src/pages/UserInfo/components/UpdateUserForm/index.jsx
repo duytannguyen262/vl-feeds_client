@@ -6,7 +6,6 @@ import { styled } from "@mui/material/styles";
 import gql from "graphql-tag";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Alert } from "reactstrap";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 
