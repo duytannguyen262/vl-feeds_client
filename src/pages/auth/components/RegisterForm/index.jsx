@@ -3,7 +3,7 @@ import gql from "graphql-tag";
 import { FastField, Form, Formik } from "formik";
 import * as Yup from "yup";
 import React from "react";
-import { useState } from "react/cjs/react.development";
+import { useState } from "react";
 import { Alert, Spinner } from "reactstrap";
 import { useNavigate } from "react-router-dom";
 
