@@ -78,7 +78,7 @@ const ResponseInput = ({ postId }) => {
                     </Button>
                   </Tooltip>
                 )}
-                <Tooltip title="Gửi bình luận" placement="right">
+                <Tooltip title="Gửi bình luận" placement="bottom">
                   <Button
                     type="button"
                     className="responseInput-btn"

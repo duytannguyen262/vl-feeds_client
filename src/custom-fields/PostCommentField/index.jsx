@@ -5,8 +5,7 @@ import { useSelector } from "react-redux";
 import "./styles.scss";
 
 const PostCommentField = (props) => {
-  const { field, form, type, placeholder } = props;
-  const { name, value, onChange, onBlur } = field;
+  const { field } = props;
   const user = useSelector((state) => state.auth.user);
   //const { errors, touched } = form;
   //const showError = errors[name] && touched[name];

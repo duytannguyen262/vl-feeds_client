@@ -1,25 +1,25 @@
 import { useMutation, useQuery } from "@apollo/client";
-import gql from "graphql-tag";
 import { Button, Chip, Tooltip } from "@mui/material";
+import gql from "graphql-tag";
 import moment from "moment";
 import "moment/locale/vi";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { TabContent, TabPane } from "reactstrap";
 
-import followIcon from "../../assets/icons/bookmark.svg";
 import filledFollowIcon from "../../assets/icons/bookmark-filled.svg";
+import followIcon from "../../assets/icons/bookmark.svg";
 import answerIcon from "../../assets/icons/comment-check.svg";
 import commentIcon from "../../assets/icons/comment.svg";
 import userImg from "../../assets/user.png";
 import { chipColor } from "../../constants/chipColor";
+import { roleColor, roleProp } from "../../constants/role";
 import Answers from "./components/Answers";
 import Comments from "./components/Comments";
+import DeletePost from "./components/DeletePost";
 import ResponseInput from "./components/ResponseInput";
 import VoteButtons from "./components/VoteButtons";
-
 import "./styles.scss";
-import DeletePost from "./components/DeletePost";
 
 const PostCard = (props) => {
   const { id, body, createdAt, author, categories, commentCount, answers } =
@@ -89,8 +89,14 @@ const PostCard = (props) => {
           <div className="postCard-content_header">
             <img src={author.avatar ? author.avatar : userImg} alt="" />
             <div className="postCard-content_header--userInfo">
-              <p>{author.username}</p>
-              <p>{moment(createdAt).fromNow()}</p>
+              <p className="authorName">{author.username}</p>
+              <span
+                style={{ backgroundColor: roleColor(author.role) }}
+                className="authorRole"
+              >
+                {roleProp(author.role)}
+              </span>
+              <p className="postDate">{moment(createdAt).fromNow()}</p>
             </div>
           </div>
           <div className="postCard-content_body">

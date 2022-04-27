@@ -24,6 +24,11 @@ const cache = new InMemoryCache({
   typePolicies: {
     Query: {
       fields: {
+        posts: {
+          merge(existing, incoming) {
+            return incoming;
+          },
+        },
         getPosts: {
           merge(existing, incoming) {
             return incoming;

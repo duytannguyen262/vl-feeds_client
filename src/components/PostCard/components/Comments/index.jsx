@@ -81,7 +81,7 @@ const Comments = ({ isCommentsOpen, postId }) => {
       {loading ? (
         <div>Loading...</div>
       ) : (
-        <div>
+        <div style={{ padding: "0 20px" }}>
           {comments()}
           {loadMoreButton()}
         </div>

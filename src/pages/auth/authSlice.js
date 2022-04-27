@@ -25,10 +25,13 @@ export const auth = createSlice({
     logout: (state) => {
       state.user = null;
     },
+    updateUser: (state, action) => {
+      state.user.avatar = action.payload;
+    },
   },
   extraReducers: () => {},
 });
 
 const { reducer, actions } = auth;
-export const { login, logout } = actions;
+export const { login, logout, updateUser } = actions;
 export default reducer;

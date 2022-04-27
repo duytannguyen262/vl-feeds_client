@@ -4,6 +4,7 @@ import { Route, Routes } from "react-router-dom";
 
 import Sidebar from "../../components/Sidebar";
 import TopBar from "../../components/TopBar";
+import PrivateAdminRoute from "../../util/PrivateAdminRoute";
 import PrivateUserRoute from "../../util/PrivateUserRoute";
 import EligiblePosts from "./components/EligiblePosts";
 import FollowedPosts from "./components/FollowedPosts";
@@ -23,8 +24,15 @@ const MainLayout = () => {
             <Route path="/*" element={<PrivateUserRoute />}>
               <Route path="following" element={<FollowedPosts />} />
               <Route path="eligible-posts" element={<EligiblePosts />} />
+              <Route
+                path="users"
+                element={
+                  <PrivateAdminRoute>
+                    <UsersManagement />
+                  </PrivateAdminRoute>
+                }
+              />
             </Route>
-            <Route path="/users" element={<UsersManagement />} />
           </Routes>
           {user && <Sidebar />}
         </div>

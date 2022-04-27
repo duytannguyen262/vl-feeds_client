@@ -13,12 +13,13 @@
   }
 
   & div {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
+    width: 70%;
+    max-width: 500px;
+    margin-top: 30px;
+    border-radius: 50%;
 
-  & svg {
-    width: 60% !important;
+    & img {
+      border-radius: 50%;
+    }
   }
 }

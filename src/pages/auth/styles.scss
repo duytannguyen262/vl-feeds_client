@@ -5,8 +5,9 @@
     align-items: center;
 
     width: 90%;
+    height: 95%;
+    max-height: 900px;
     max-width: 1280px;
-    height: 75%;
 
     border-radius: 10px;
     background-color: #fff;
@@ -15,6 +16,7 @@
 
   &_picture--container {
     position: relative;
+    flex: 7;
     height: 100%;
 
     & img {
@@ -32,9 +34,10 @@
   }
 
   &_inner--container {
-    width: 600px;
-    height: 100%;
-    padding: 0 20px;
+    flex: 4;
+    width: 80%;
+    height: 90%;
+    padding: 20px 20px;
 
     display: flex;
     justify-content: center;

@@ -22,6 +22,8 @@ export const data = [
     imgSrc: starIcon,
     link: "/eligible-posts",
   },
+];
+export const privateData = [
   {
     id: "4",
     title: "Quản lý người dùng",

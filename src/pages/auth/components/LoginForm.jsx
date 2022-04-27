@@ -93,13 +93,6 @@ const LoginForm = () => {
                     ))}
                   </Alert>
                 )}
-                <div className="login-form_strikethru-text">
-                  <span>Hoặc</span>
-                </div>
-                <button className="login-form_office--container">
-                  <img src={office} alt="" />
-                  <span>Office 365 for Students</span>
-                </button>
               </Form>
             );
           }}

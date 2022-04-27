@@ -23,8 +23,8 @@
       }
 
       & img {
-        width: 10%;
-        height: 10%;
+        width: 20px;
+        height: 20px;
       }
     }
 
@@ -95,29 +95,5 @@
 #speedDial-actions {
   & button {
     background-color: #fff;
-  }
-}
-//responsive--------------------------
-@media (max-width: 850px) {
-  .sideBar {
-    &_container {
-      & nav {
-        margin: 0 auto;
-        width: 60%;
-      }
-    }
-
-    &_nav {
-      &-item {
-        justify-content: center;
-        & span {
-          display: none;
-        }
-
-        & img {
-          width: 45%;
-        }
-      }
-    }
   }
 }

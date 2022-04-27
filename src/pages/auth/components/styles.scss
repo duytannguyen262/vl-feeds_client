@@ -128,22 +128,23 @@
   .login-form {
     &_appLogo--container {
       & img {
-        width: 45%;
-        height: 45%;
+        width: 125px;
+        height: 120px;
 
         padding: 40px;
       }
     }
 
     &_header {
-      font-size: 26px;
+      font-size: 20px;
+      margin-bottom: 10px;
     }
 
     &_input-field {
       margin-bottom: 15px;
 
       & label {
-        font-size: 14px;
+        font-size: 13px;
       }
 
       & input {

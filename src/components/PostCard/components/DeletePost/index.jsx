@@ -12,7 +12,10 @@ import {
 import gql from "graphql-tag";
 import React from "react";
 import trashIcon from "../../../../assets/icons/trash.svg";
-import { FETCH_POSTS_QUERY } from "../../../../util/graphql";
+import {
+  FETCH_POSTS_PAGINATION,
+  FETCH_POSTS_QUERY,
+} from "../../../../util/graphql";
 
 const style = {
   position: "absolute",
@@ -33,9 +36,21 @@ const DeletePost = ({ postId }) => {
 
   const [deletePost] = useMutation(DELETE_POST_MUTATION, {
     update(proxy) {
-      handleClose();
-
       //remove deleted post from cache
+      // const data = proxy.readQuery({
+      //   query: FETCH_POSTS_PAGINATION,
+      //   variables: {
+      //     first: 2,
+      //   },
+      // });
+      // proxy.writeQuery({
+      //   query: FETCH_POSTS_PAGINATION,
+      //   data: {
+      //     posts: {
+      //       edges: data.posts.edges.filter((post) => post.id !== postId),
+      //     },
+      //   },
+      // });
       const data = proxy.readQuery({
         query: FETCH_POSTS_QUERY,
       });
@@ -46,6 +61,7 @@ const DeletePost = ({ postId }) => {
           getPosts: data.getPosts.filter((post) => post.id !== postId),
         },
       });
+      handleClose();
     },
     variables: {
       postId,

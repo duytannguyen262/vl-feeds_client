@@ -1,6 +1,7 @@
 import { React, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { Button, Collapse, Input } from "reactstrap";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Collapse, Input } from "reactstrap";
+import { Button, IconButton, styled } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { Menu, MenuItem } from "@mui/material";
 
@@ -11,19 +12,27 @@ import logOutIcon from "../../assets/icons/sign-out.svg";
 import userImg from "../../assets/user.png";
 import angleSmallImg from "../../assets/icons/angle-small-right.svg";
 import { logout } from "../../pages/auth/authSlice";
+import { searchFilterChange } from "./filterSlice";
 
 import "./styles.scss";
 
+const RegisterButton = styled(Button)({
+  background: "#fe4445",
+  "&:hover": {
+    background: "#fe4445",
+  },
+});
 const TopBar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const user = useSelector((state) => state.auth.user);
+
   const dispatch = useDispatch();
   const toggle = () => setIsOpen(!isOpen);
   const [anchorElUser, setAnchorElUser] = useState(null);
-
   const navigate = useNavigate();
   const open = Boolean(anchorElUser);
 
+  const { pathname } = useLocation();
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
@@ -39,6 +48,13 @@ const TopBar = () => {
     dispatch(action);
     navigate("/");
   };
+
+  const [searchValues, setSearchValues] = useState("");
+  const handleSearchChange = (e) => {
+    setSearchValues(e.target.value);
+    dispatch(searchFilterChange(e.target.value));
+  };
+
   return (
     <>
       <div className="topBar">
@@ -47,16 +63,25 @@ const TopBar = () => {
             <img src={logo} alt="" />
             <h1 className="topBar-title">Văn Lang Feeds</h1>
           </Link>
-          <div className="topBar-search_mobile">
-            <Button type="button" onClick={toggle}>
-              <img src={searchIcon} alt="" />
-            </Button>
+          {pathname === "/" && (
+            <div className="topBar-search_mobile">
+              <IconButton type="button" onClick={toggle}>
+                <img src={searchIcon} alt="" />
+              </IconButton>
+            </div>
+          )}
+        </div>
+        {pathname === "/" && (
+          <div className="topBar-search">
+            <Input
+              type="text"
+              placeholder="Tìm kiếm"
+              value={searchValues}
+              onChange={handleSearchChange}
+            />
+            <img src={searchIcon} alt="" />
           </div>
-        </div>
-        <div className="topBar-search">
-          <Input type="text" placeholder="Tìm kiếm" />
-          <img src={searchIcon} alt="" />
-        </div>
+        )}
 
         <div className="topBar-account">
           {user !== null ? (
@@ -96,13 +121,21 @@ const TopBar = () => {
           ) : (
             <div className="topBar-account_unauth">
               <Link to="/auth/login">Đăng nhập</Link>
-              <span> / </span>
-              <Link to="/auth/register">Đăng kí</Link>
+              <Link to="/auth/register">
+                <RegisterButton type="button" variant="contained">
+                  Đăng kí
+                </RegisterButton>
+              </Link>
             </div>
           )}
         </div>
         <Collapse className="topBar-search_mobile--input" isOpen={isOpen}>
-          <Input type="text" placeholder="Tìm kiếm" />
+          <Input
+            type="text"
+            placeholder="Tìm kiếm"
+            value={searchValues}
+            onChange={handleSearchChange}
+          />
         </Collapse>
       </div>
     </>

@@ -35,6 +35,32 @@ const PostFormModal = React.forwardRef((props, ref) => {
 
   const [createPost, { loading }] = useMutation(CREATE_POST_MUTATION, {
     update(proxy, result) {
+      // const data = proxy.readQuery({
+      //   query: FETCH_POSTS_PAGINATION,
+      //   variables: {
+      //     first: 2,
+      //   },
+      // });
+      // proxy.writeQuery({
+      //   query: FETCH_POSTS_PAGINATION,
+      //   variables: {
+      //     first: 2,
+      //   },
+      //   data: {
+      //     posts: {
+      //       ...data.posts,
+      //       edges: [
+      //         ...data.posts.edges,
+      //         {
+      //           node: {
+      //             ...result.data.createPost,
+      //             cursor: result.data.createPost.id,
+      //           },
+      //         },
+      //       ],
+      //     },
+      //   },
+      // });
       const data = proxy.readQuery({
         query: FETCH_POSTS_QUERY,
       });
@@ -116,6 +142,7 @@ const CREATE_POST_MUTATION = gql`
         id
         username
         avatar
+        role
       }
       commentCount
       votesCount

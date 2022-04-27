@@ -19,7 +19,7 @@
   }
 }
 
-@media (max-width: 700px) {
+@media (max-width: 850px) {
   .main {
     flex-wrap: wrap;
     & .sideBar_container {
@@ -36,6 +36,15 @@
 
     & .page-content {
       width: 100%;
+      padding: 0;
+
+      & .postForm {
+        width: 100%;
+      }
+
+      & .postCard {
+        width: 100%;
+      }
     }
   }
 }

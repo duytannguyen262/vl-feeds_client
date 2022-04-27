@@ -5,31 +5,43 @@ import {
   Tooltip,
 } from "@mui/material";
 import React from "react";
+import { useSelector } from "react-redux";
 import { NavLink, useNavigate } from "react-router-dom";
 
-import { data } from "./data";
+import { data, privateData } from "./data";
 import "./sideBar.scss";
 
 const Sidebar = () => {
+  const user = useSelector((state) => state.auth.user);
   const [open, setOpen] = React.useState(false);
+  const [sideBarList, setSideBarList] = React.useState(data);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const navigate = useNavigate();
+
+  React.useEffect(() => {
+    user.role === "admin" && setSideBarList([...data, ...privateData]);
+    return () => {
+      setSideBarList(data);
+    };
+  }, [user]);
 
   return (
     <div className="sideBar_container">
       <nav>
         <ul className="sideBar_nav-list">
-          {data.map((item) => (
-            <Tooltip key={item.id} title={item.title} placement="left">
-              <NavLink to={item.link}>
-                <li className="sideBar_nav-item">
-                  <img src={item.imgSrc} alt="" />
-                  <span>{item.title} </span>
-                </li>
-              </NavLink>
-            </Tooltip>
-          ))}
+          {sideBarList.map((item) => {
+            return (
+              <Tooltip key={item.id} title={item.title} placement="left">
+                <NavLink to={item.link}>
+                  <li className="sideBar_nav-item">
+                    <img src={item.imgSrc} alt="" />
+                    <span>{item.title} </span>
+                  </li>
+                </NavLink>
+              </Tooltip>
+            );
+          })}
         </ul>
       </nav>
 
@@ -41,7 +53,7 @@ const Sidebar = () => {
         onOpen={handleOpen}
         open={open}
       >
-        {data.map((action) => (
+        {sideBarList.map((action) => (
           <SpeedDialAction
             key={action.title}
             icon={<img src={action.imgSrc} alt="" style={{ width: "50%" }} />}

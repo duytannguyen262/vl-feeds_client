@@ -1,0 +1,51 @@
+.userTable {
+  &_container {
+    box-shadow: 0 6px 18px 0 rgb(32 32 149 / 10%);
+    border-radius: 10px;
+  }
+}
+
+.cellWrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  & img {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+}
+
+.deleteSelected {
+  display: flex;
+  justify-content: flex-end;
+
+  padding: 10px;
+  background-color: #e3eefa;
+  margin-bottom: 20px;
+  border-radius: 10px;
+
+  & button {
+    display: flex;
+    gap: 5px;
+
+    & img {
+      width: 20px;
+      height: 20px;
+    }
+
+    & span {
+      color: #374957;
+    }
+  }
+}
+
+.updateRole {
+  color: #374957;
+  padding: 15px;
+  background-color: #e3eefa;
+  margin-bottom: 20px;
+  border-radius: 10px;
+}
