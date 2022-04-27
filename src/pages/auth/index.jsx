@@ -14,7 +14,7 @@ const AuthPage = () => {
 
   useEffect(() => {
     user !== null && navigate("/");
-  }, []);
+  }, [user, navigate]);
 
   return (
     <div className="background-main d-flex justify-content-center align-items-center">
