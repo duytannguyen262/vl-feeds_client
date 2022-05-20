@@ -8,7 +8,7 @@ import { persistor, store } from "./app/store";
 import { setContext } from "apollo-link-context";
 
 const uploadLink = createUploadLink({
-  uri: "http://localhost:5000/graphql",
+  uri: "https://vanlangfeeds-server.herokuapp.com/graphql",
 });
 
 const authLink = setContext(() => {
