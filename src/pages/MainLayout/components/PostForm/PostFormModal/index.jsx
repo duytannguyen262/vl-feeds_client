@@ -1,16 +1,20 @@
 import React, { useState } from "react";
 import { FastField, Form, Formik } from "formik";
-import { Box, Button } from "@mui/material";
+import { Box, Button, ImageList, ImageListItem } from "@mui/material";
 import { useMutation } from "@apollo/client";
 import gql from "graphql-tag";
+import PhotoCamera from "@mui/icons-material/PhotoCamera";
+import { Spinner } from "reactstrap";
+import { useNavigate } from "react-router-dom";
+import Axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.min.css";
 
 import PostInputField from "../../../../../custom-fields/PostInputField";
 import SelectChipField from "../../../../../custom-fields/SelectChipField";
 import crossIcon from "../../../../../assets/icons/cross.svg";
 import { FETCH_POSTS_QUERY } from "../../../../../util/graphql";
 import "./styles.scss";
-import { Spinner } from "reactstrap";
-import { useNavigate } from "react-router-dom";
 
 const style = {
   position: "absolute",
@@ -31,65 +35,105 @@ const PostFormModal = React.forwardRef((props, ref) => {
   const [values, setValues] = useState({
     body: "",
     categories: [],
+    files: [],
   });
+  const [previewImages, setPreviewImages] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [createPost, { loading }] = useMutation(CREATE_POST_MUTATION, {
     update(proxy, result) {
-      // const data = proxy.readQuery({
-      //   query: FETCH_POSTS_PAGINATION,
-      //   variables: {
-      //     first: 2,
-      //   },
-      // });
-      // proxy.writeQuery({
-      //   query: FETCH_POSTS_PAGINATION,
-      //   variables: {
-      //     first: 2,
-      //   },
-      //   data: {
-      //     posts: {
-      //       ...data.posts,
-      //       edges: [
-      //         ...data.posts.edges,
-      //         {
-      //           node: {
-      //             ...result.data.createPost,
-      //             cursor: result.data.createPost.id,
-      //           },
-      //         },
-      //       ],
-      //     },
-      //   },
-      // });
       const data = proxy.readQuery({
         query: FETCH_POSTS_QUERY,
       });
-
       proxy.writeQuery({
         query: FETCH_POSTS_QUERY,
         data: {
-          getPosts: [result.data.createPost, ...data.getPosts],
+          posts: {
+            ...data.posts,
+            edges: [
+              {
+                __typename: "Edge",
+                node: {
+                  ...result.data.createPost,
+                },
+                cursor: result.data.createPost.id,
+              },
+              ...data.posts.edges,
+            ],
+          },
         },
       });
       setValues({
         body: "",
         categories: [],
+        files: [],
       });
       setOpen(false);
     },
   });
 
   const submitForm = async (newValues) => {
-    await createPost({
-      variables: {
-        ...newValues,
-      },
+    setIsLoading(true);
+    const { files } = newValues;
+
+    //check if pictures are images
+    const isImages = Array.from(files).every((picture) => {
+      return picture.type.includes("image");
     });
-    navigate("/");
+
+    if (isImages) {
+      const picturesToUpload = [];
+      const cloudName = process.env.REACT_APP_CLOUD_NAME;
+      const apiKey = process.env.REACT_APP_API_KEY;
+      const uploadPreset = process.env.REACT_APP_UPLOAD_PRESET;
+
+      const uploaders = Array.from(files).map((file) => {
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("upload_preset", uploadPreset);
+        formData.append("api_key", apiKey);
+
+        return Axios.post(
+          `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
+          formData,
+          {
+            headers: { "X-Requested-With": "XMLHttpRequest" },
+          }
+        ).then((response) => {
+          const data = response.data;
+          const fileURL = data.secure_url;
+          const public_id = data.public_id;
+          picturesToUpload.push({ url: fileURL, public_id: public_id });
+        });
+      });
+      Axios.all(uploaders).then(() => {
+        setIsLoading(false);
+        createPost({
+          variables: {
+            body: newValues.body,
+            categories: newValues.categories,
+            pictures: picturesToUpload,
+          },
+        });
+        navigate("/");
+      });
+    } else {
+      toast.error("Hãy chọn đúng định dạng hình ảnh!", {
+        position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      setIsLoading(false);
+    }
   };
 
   return (
     <Box sx={style} className="postForm_modal" open={open}>
+      <ToastContainer />
       <div className="postForm_modal-close">
         <Button onClick={handleClose}>
           <img src={crossIcon} alt="" />
@@ -102,7 +146,7 @@ const PostFormModal = React.forwardRef((props, ref) => {
       </div>
       <div className="postForm_modal-body">
         <Formik initialValues={values} onSubmit={submitForm}>
-          {(formik) => {
+          {({ values, setFieldValue }) => {
             return (
               <Form className="postForm_modal-control" action="">
                 <FastField
@@ -111,6 +155,44 @@ const PostFormModal = React.forwardRef((props, ref) => {
                   placeholder="Bạn muốn góp ý như thế nào tới nhà trường?"
                   type="text"
                 />
+
+                <label htmlFor="contained-button-file" className="mb-3">
+                  <input
+                    accept="image/*"
+                    id="contained-button-file"
+                    hidden
+                    multiple
+                    type="file"
+                    onChange={(e) => {
+                      if (e.target.files[0] !== undefined) {
+                        setFieldValue("files", e.target.files);
+                        setPreviewImages(e.target.files);
+                      }
+                    }}
+                  />
+                  <Button
+                    variant="contained"
+                    component="span"
+                    sx={{ background: "#448aff" }}
+                  >
+                    <PhotoCamera />
+                    &nbsp;Chọn ảnh
+                  </Button>
+                </label>
+                {previewImages.length > 0 && (
+                  <ImageList
+                    sx={{ height: 300 }}
+                    cols={3}
+                    rowHeight={164}
+                    className="mb-3"
+                  >
+                    {Array.from(previewImages).map((image, index) => (
+                      <ImageListItem key={index}>
+                        <img src={URL.createObjectURL(image)} alt="" />
+                      </ImageListItem>
+                    ))}
+                  </ImageList>
+                )}
 
                 <FastField
                   name="categories"
@@ -122,9 +204,13 @@ const PostFormModal = React.forwardRef((props, ref) => {
                 <Button
                   className="btn login-btn mt-4"
                   type="submit"
-                  disabled={!formik.values.body}
+                  disabled={!values.body.trim() || loading || isLoading}
                 >
-                  {loading ? <Spinner style={{ color: "white" }} /> : "Đăng"}
+                  {loading || isLoading ? (
+                    <Spinner style={{ color: "white" }} />
+                  ) : (
+                    "Đăng"
+                  )}
                 </Button>
               </Form>
             );
@@ -136,16 +222,26 @@ const PostFormModal = React.forwardRef((props, ref) => {
 });
 
 const CREATE_POST_MUTATION = gql`
-  mutation createPost($body: String!, $categories: [String!]) {
-    createPost(body: $body, categories: $categories) {
+  mutation createPost(
+    $body: String!
+    $categories: [String!]
+    $pictures: [ImageInputs!]
+  ) {
+    createPost(body: $body, categories: $categories, pictures: $pictures) {
       id
       body
       createdAt
       author {
         id
         username
-        avatar
+        avatar {
+          url
+        }
         role
+      }
+      pictures {
+        url
+        public_id
       }
       commentCount
       votesCount
@@ -166,7 +262,9 @@ const CREATE_POST_MUTATION = gql`
         body
         author {
           username
-          avatar
+          avatar {
+            url
+          }
         }
       }
       answers {
@@ -175,7 +273,9 @@ const CREATE_POST_MUTATION = gql`
         body
         author {
           username
-          avatar
+          avatar {
+            url
+          }
         }
       }
     }

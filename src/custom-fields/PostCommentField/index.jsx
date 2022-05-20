@@ -13,7 +13,8 @@ const PostCommentField = (props) => {
     <div className="post_comment_text-area">
       <TextareaAutosize
         style={{
-          paddingRight: user.role === "teacher" ? "100px" : "50px",
+          paddingRight:
+            user.role === "teacher" || user.role === "admin" ? "100px" : "50px",
         }}
         type="text"
         {...field}

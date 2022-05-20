@@ -1,11 +1,14 @@
+import { Button } from "@mui/material";
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { NavLink, Route, Routes, useNavigate } from "react-router-dom";
 
 import authBanner from "../../assets/authBanner.jpg";
+import backIcon from "../../assets/icons/angle-left-white.svg";
 import vluLogo from "../../assets/vluLogo.png";
 import LoginForm from "./components/LoginForm";
 import RegisterForm from "./components/RegisterForm";
+
 import "./styles.scss";
 
 const AuthPage = () => {
@@ -17,7 +20,22 @@ const AuthPage = () => {
   }, [user, navigate]);
 
   return (
-    <div className="background-main d-flex justify-content-center align-items-center">
+    <div
+      style={{ position: "relative" }}
+      className="background-main d-flex justify-content-center
+      align-items-center"
+    >
+      <div className="backToHomeBtn">
+        <Button
+          sx={{ padding: "10px", color: "white", borderRadius: "15px" }}
+          onClick={() => navigate("/")}
+        >
+          <div className="backToHomeBtn_img">
+            <img src={backIcon} alt="" />
+          </div>
+          <span>Về trang chủ</span>
+        </Button>
+      </div>
       <div className="auth-form_container">
         <div className="auth-form_picture--container">
           <img src={authBanner} alt="" />

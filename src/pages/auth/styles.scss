@@ -5,7 +5,7 @@
     align-items: center;
 
     width: 90%;
-    height: 95%;
+    height: 90%;
     max-height: 900px;
     max-width: 1280px;
 
@@ -22,6 +22,7 @@
     & img {
       &:first-child {
         border-radius: 10px 0 0 10px;
+        object-fit: cover;
       }
       &:last-child {
         position: absolute;
@@ -79,11 +80,28 @@
   }
 }
 
+.backToHomeBtn {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+
+  &_img {
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+  }
+
+  & span {
+    font-size: 1.1rem;
+  }
+}
+
 //responsive--------------------------
 @media (max-width: 1000px) {
   .auth-form {
     &_container {
       width: 80%;
+      max-width: 650px;
     }
     &_picture--container {
       display: none;

@@ -1,5 +1,8 @@
 .update-form {
   display: flex;
+  flex-direction: column;
+  gap: 20px;
+  transform: translateY(-80px);
 
   &_user {
     &-container {
@@ -10,9 +13,29 @@
       align-items: center;
     }
   }
+  &_banner {
+    height: 400px;
+    transform: translateY(100px);
 
+    & label {
+      height: 100%;
+      width: 100%;
+
+      & div {
+        height: 100%;
+        width: 100%;
+
+        & img {
+          object-fit: cover;
+          border-radius: 15px;
+        }
+      }
+    }
+  }
   &_avatar {
     width: 200px;
+    margin: 0 auto;
+
     & label {
       position: relative;
 
@@ -32,6 +55,7 @@
 
         & img {
           border-radius: 50%;
+          object-fit: cover;
         }
       }
 
@@ -58,13 +82,6 @@
 
 @media (max-width: 950px) {
   .update-form {
-    flex-direction: column;
-    gap: 20px;
-
-    &_avatar {
-      margin: 0 auto;
-    }
-
     &_user {
       &-field {
         flex-direction: column;

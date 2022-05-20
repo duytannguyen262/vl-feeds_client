@@ -53,4 +53,12 @@
       }
     }
   }
+
+  &-preview {
+    display: flex;
+    flex-wrap: wrap;
+    & img {
+      flex: 1;
+    }
+  }
 }

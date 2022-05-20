@@ -26,12 +26,16 @@ export const auth = createSlice({
       state.user = null;
     },
     updateUser: (state, action) => {
-      state.user.avatar = action.payload;
+      state.user.avatar = action.payload.avatar;
+      state.user.banner = action.payload.banner;
+    },
+    updateFollowings: (state, action) => {
+      state.user.followings = action.payload;
     },
   },
   extraReducers: () => {},
 });
 
 const { reducer, actions } = auth;
-export const { login, logout, updateUser } = actions;
+export const { login, logout, updateUser, updateFollowings } = actions;
 export default reducer;

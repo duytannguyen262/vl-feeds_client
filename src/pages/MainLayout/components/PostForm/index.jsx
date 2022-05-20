@@ -15,7 +15,7 @@ const PostForm = () => {
   return (
     <div className="postForm">
       <div className="postForm-avatar">
-        <img src={user.avatar ? user.avatar : userImg} alt="" />
+        <img src={user.avatar.url ? user.avatar.url : userImg} alt="" />
       </div>
       <div className="postForm_btn-to-open-modal">
         <Button onClick={handleOpen}>

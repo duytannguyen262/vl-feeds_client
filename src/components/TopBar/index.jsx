@@ -8,6 +8,7 @@ import { Menu, MenuItem } from "@mui/material";
 import logo from "../../assets/logo.png";
 import searchIcon from "../../assets/icons/search-outline 1.svg";
 import userIcon from "../../assets/icons/user.svg";
+import settingsIcon from "../../assets/icons/settings.svg";
 import logOutIcon from "../../assets/icons/sign-out.svg";
 import userImg from "../../assets/user.png";
 import angleSmallImg from "../../assets/icons/angle-small-right.svg";
@@ -15,6 +16,8 @@ import { logout } from "../../pages/auth/authSlice";
 import { searchFilterChange } from "./filterSlice";
 
 import "./styles.scss";
+import { useQuery } from "@apollo/client";
+import { FETCH_POSTS_QUERY } from "../../util/graphql";
 
 const RegisterButton = styled(Button)({
   background: "#fe4445",
@@ -26,6 +29,11 @@ const TopBar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const user = useSelector((state) => state.auth.user);
 
+  const { refetch } = useQuery(FETCH_POSTS_QUERY, {
+    variables: {
+      limit: 15,
+    },
+  });
   const dispatch = useDispatch();
   const toggle = () => setIsOpen(!isOpen);
   const [anchorElUser, setAnchorElUser] = useState(null);
@@ -55,11 +63,18 @@ const TopBar = () => {
     dispatch(searchFilterChange(e.target.value));
   };
 
+  const handleLogoClick = () => {
+    window.scrollTo(0, 0);
+    if (window.scrollY === 0) {
+      refetch();
+    }
+  };
+
   return (
     <>
       <div className="topBar">
         <div className="d-flex align-items-center gap-3">
-          <Link to="/" className="topBar-logo">
+          <Link to="/" className="topBar-logo" onClick={handleLogoClick}>
             <img src={logo} alt="" />
             <h1 className="topBar-title">Văn Lang Feeds</h1>
           </Link>
@@ -75,7 +90,7 @@ const TopBar = () => {
           <div className="topBar-search">
             <Input
               type="text"
-              placeholder="Tìm kiếm"
+              placeholder="Tìm kiếm theo danh mục"
               value={searchValues}
               onChange={handleSearchChange}
             />
@@ -89,7 +104,7 @@ const TopBar = () => {
               <div onClick={handleOpenUserMenu}>
                 <img src={angleSmallImg} alt="" className="profile-more_img" />
                 <h3>{user.username}</h3>
-                <img src={user.avatar ? user.avatar : userImg} alt="" />
+                <img src={user.avatar.url ? user.avatar.url : userImg} alt="" />
               </div>
               <Menu
                 anchorEl={anchorElUser}
@@ -102,12 +117,21 @@ const TopBar = () => {
               >
                 <MenuItem
                   onClick={() => {
-                    navigate("/profile");
+                    navigate(`/user/${user.id}`);
                   }}
                   className="topBar-account_menu-item"
                 >
                   <img src={userIcon} alt="" />
-                  <span>Tài khoản</span>
+                  <span>Trang cá nhân</span>
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    navigate("/user/profile");
+                  }}
+                  className="topBar-account_menu-item"
+                >
+                  <img src={settingsIcon} alt="" />
+                  <span>Cài đặt người dùng</span>
                 </MenuItem>
                 <MenuItem
                   onClick={handleLogout}
@@ -132,7 +156,7 @@ const TopBar = () => {
         <Collapse className="topBar-search_mobile--input" isOpen={isOpen}>
           <Input
             type="text"
-            placeholder="Tìm kiếm"
+            placeholder="Tìm kiếm theo danh mục"
             value={searchValues}
             onChange={handleSearchChange}
           />

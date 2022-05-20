@@ -19,7 +19,6 @@ const Comments = ({ isCommentsOpen, postId }) => {
       postId,
     },
     skip: !isCommentsOpen,
-    pollInterval: 1000,
   });
 
   const loadMoreButton = () => {
@@ -47,7 +46,11 @@ const Comments = ({ isCommentsOpen, postId }) => {
           <div key={comment.id}>
             <div className="comment">
               <img
-                src={comment.author.avatar ? comment.author.avatar : userImg}
+                src={
+                  comment.author.avatar.url
+                    ? comment.author.avatar.url
+                    : userImg
+                }
                 alt=""
               />
               <div className="comment_info">

@@ -102,7 +102,10 @@ const DELETE_COMMENT_MUTATION = gql`
         author {
           id
           username
-          avatar
+          avatar {
+            public_id
+            url
+          }
         }
       }
       commentCount
@@ -120,7 +123,10 @@ const DELETE_ANSWER_MUTATION = gql`
         body
         author {
           username
-          avatar
+          avatar {
+            public_id
+            url
+          }
         }
       }
     }

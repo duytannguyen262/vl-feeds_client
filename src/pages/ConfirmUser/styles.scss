@@ -1,0 +1,29 @@
+.confirmUser {
+  width: 100vw;
+  height: 100vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: linear-gradient(to right, #dd2476, #ff512f);
+
+  &__img-container {
+    width: 110px;
+    height: 100px;
+    margin-bottom: 20px;
+  }
+
+  & h1 {
+    font-family: "Lobster", cursive;
+    font-size: 30px;
+    margin-bottom: 20px;
+    color: #ff4546;
+  }
+
+  & p {
+    font-weight: 500;
+    font-size: 18px;
+    margin-bottom: 20px;
+  }
+}

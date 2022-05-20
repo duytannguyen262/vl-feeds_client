@@ -5,13 +5,15 @@ import * as Yup from "yup";
 import React from "react";
 import { useState } from "react";
 import { Alert, Spinner } from "reactstrap";
-import { useNavigate } from "react-router-dom";
+import { Modal, useModal } from "@nextui-org/react";
 
 import logo from "../../../../assets/logo.png";
+import checkGif from "../../../../assets/gifs/check.gif";
 import InputField from "../../../../custom-fields/InputField";
 import "./styles.scss";
 
 const RegisterForm = () => {
+  const { setVisible, bindings } = useModal();
   const [values, setValues] = useState({
     userName: "",
     email: "",
@@ -20,17 +22,14 @@ const RegisterForm = () => {
   });
 
   const [errors, setErrors] = useState({});
-  const navigate = useNavigate();
 
   const validate = Yup.object({
     userName: Yup.string()
       .min(3, "Tên đăng nhập phải có ít nhất 3 ký tự")
       .max(15, "Chỉ nhập tối đa 15 kí tự")
       .required("Tên đăng nhập không được để trống")
-      .matches(
-        /^[a-zA-Z0-9]+$/,
-        "Tên đăng nhập không được chứa ký tự đặc biệt"
-      ),
+      .matches(/^[a-zA-Z0-9]+$/, "Tên đăng nhập không được chứa ký tự đặc biệt")
+      .matches(/(?!^\d+$)^.+$/, "Tên đăng nhập không được để tất cả là số"),
     email: Yup.string()
       .min(3, "Email phải có ít nhất 3 ký tự")
       .email("Email không hợp lệ")
@@ -41,26 +40,27 @@ const RegisterForm = () => {
       then: Yup.string().oneOf([Yup.ref("password")], "Mật khẩu không khớp"),
     }),
   });
-
   const [addUser, { loading }] = useMutation(REGISTER_USER, {
     update() {
-      navigate("/auth/login");
+      setVisible(true);
+      setValues({
+        userName: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+      });
+      setErrors({});
     },
     onError(err) {
       setErrors(err.graphQLErrors[0].extensions.errors);
     },
   });
 
-  const submitForm = async (newValues) => {
+  const submitForm = async (newValues, resetForm) => {
     await addUser({
       variables: newValues,
     });
-    setValues({
-      userName: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
-    });
+    Object.keys(errors).length === 0 && resetForm();
   };
 
   return (
@@ -69,12 +69,28 @@ const RegisterForm = () => {
         <div className="login-form_appLogo--container">
           <img src={logo} alt="" />
         </div>
-
+        <Modal
+          width="50%"
+          style={{ maxWidth: "800px", margin: "0 auto" }}
+          aria-labelledby="modal-title"
+          aria-describedby="modal-description"
+          {...bindings}
+        >
+          <div className="registedSuccess-modal_container">
+            <div className="registedSuccess-modal_gif">
+              <img src={checkGif} alt="" />
+            </div>
+            <h3>Đăng ký thành công!</h3>
+            <p>Hãy truy cập vào email đã đăng ký để xác thực tài khoản nhé!</p>
+          </div>
+        </Modal>
         <h1 className="login-form_header">Đăng kí</h1>
         <Formik
           initialValues={values}
           validationSchema={validate}
-          onSubmit={submitForm}
+          onSubmit={(values, { resetForm }) => {
+            submitForm(values, resetForm);
+          }}
         >
           {(formik) => {
             return (

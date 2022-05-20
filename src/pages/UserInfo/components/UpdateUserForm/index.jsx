@@ -1,17 +1,20 @@
-import { useMutation } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import * as Yup from "yup";
 import { Button, IconButton } from "@mui/material";
 import { FastField, Form, Formik } from "formik";
 import { styled } from "@mui/material/styles";
 import gql from "graphql-tag";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
+import Axios from "axios";
+import { Spinner } from "reactstrap";
 
 import PreviewImage from "../../../../components/PreviewImage";
 import cameraIcon from "../../../../assets/icons/camera.svg";
 import userImg from "../../../../assets/user.png";
+import bannerImg from "../../../../assets/authBanner.jpg";
 import UpdateInputField from "../../../../custom-fields/UpdateInputField";
 import { updateUser } from "../../../auth/authSlice";
 import "./styles.scss";
@@ -36,6 +39,19 @@ const SubmitButton = styled(Button)({
 const UpdateUserForm = () => {
   const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
+  const [userInfo, setUserInfo] = React.useState({});
+  const { data } = useQuery(GET_USER, {
+    variables: {
+      userId: user.id,
+    },
+  });
+
+  useEffect(() => {
+    if (data) {
+      setUserInfo(data.getUser);
+    }
+  }, [data]);
+
   const validate = Yup.object({
     confirmNewPassword: Yup.string().when("password", {
       is: (val) => (val && val.length > 0 ? true : false),
@@ -43,36 +59,14 @@ const UpdateUserForm = () => {
     }),
   });
 
-  const [uploadFile] = useMutation(UPLOAD_AVATAR, {
+  const [uploadFile] = useMutation(UPLOAD_IMG, {
     onCompleted: (data) => {
-      const newAvatar = data.uploadFileToDtb.url;
-      const action = updateUser(newAvatar);
+      const action = updateUser(data.uploadUserImg);
       dispatch(action);
-
-      toast.success("Cập nhật thành công!", {
-        position: "bottom-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
     },
   });
 
   const [changePassword] = useMutation(CHANGE_PASSWORD, {
-    onCompleted: () => {
-      toast.success("Cập nhật thành công!", {
-        position: "bottom-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-    },
     onError(err) {
       toast.error(err.graphQLErrors[0].message, {
         position: "bottom-right",
@@ -86,10 +80,66 @@ const UpdateUserForm = () => {
     },
   });
 
-  const handleSubmit = (values) => {
-    const { avatar, oldPassword, newPassword, confirmNewPassword } = values;
-    if (avatar !== user.avatar) {
-      uploadFile({ variables: { avatar } });
+  const [isLoading, setIsLoading] = useState(false);
+  const handleSubmit = async (values) => {
+    const { banner, avatar, oldPassword, newPassword, confirmNewPassword } =
+      values;
+    if (
+      (avatar && avatar.type && avatar.type.match("image.*")) ||
+      (banner && banner.type && banner.type.match("image.*"))
+    ) {
+      setIsLoading(true);
+      const cloudName = process.env.REACT_APP_CLOUD_NAME;
+      const apiKey = process.env.REACT_APP_API_KEY;
+      const uploadPreset = "profile_upload";
+      const upload = async (file) => {
+        if (!file.url) {
+          const formData = new FormData();
+          formData.append("file", file);
+          formData.append("upload_preset", uploadPreset);
+          formData.append("api_key", apiKey);
+
+          const response = await Axios.post(
+            `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
+            formData,
+            {
+              headers: { "X-Requested-With": "XMLHttpRequest" },
+            }
+          );
+          const data = response.data;
+          const fileURL = data.secure_url;
+          const public_id = data.public_id;
+          return {
+            url: fileURL,
+            public_id: public_id,
+          };
+        }
+      };
+      const avatarUrl = await upload(avatar);
+      const bannerUrl = await upload(banner);
+      if (avatarUrl || bannerUrl) {
+        if (avatarUrl) {
+          await uploadFile({
+            variables: {
+              avatar: {
+                url: avatarUrl.url,
+                public_id: avatarUrl.public_id,
+              },
+            },
+          });
+        }
+        if (bannerUrl) {
+          await uploadFile({
+            variables: {
+              banner: {
+                url: bannerUrl.url,
+                public_id: bannerUrl.public_id,
+              },
+            },
+          });
+        }
+        setIsLoading(false);
+      }
     }
     if (oldPassword && newPassword && confirmNewPassword) {
       changePassword({
@@ -100,6 +150,16 @@ const UpdateUserForm = () => {
         },
       });
     }
+
+    toast.success("Cập nhật thành công!", {
+      position: "bottom-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
   };
   return (
     <>
@@ -107,7 +167,12 @@ const UpdateUserForm = () => {
         initialValues={{
           username: user.username,
           email: user.email,
-          avatar: user.avatar,
+          avatar: {
+            url: user.avatar.url,
+          },
+          banner: {
+            url: user.banner.url,
+          },
           role: user.role,
           password: "",
           oldPassword: "",
@@ -123,12 +188,40 @@ const UpdateUserForm = () => {
         {({ values, setFieldValue, dirty }) => (
           <Form>
             <div className="update-form">
+              <div className="update-form_banner">
+                <label htmlFor="banner-file">
+                  {values && (
+                    <PreviewImage
+                      file={
+                        values.banner.url === "" ? { bannerImg } : values.banner
+                      }
+                    />
+                  )}
+                  <input
+                    accept="image/*"
+                    id="banner-file"
+                    type="file"
+                    hidden
+                    onChange={(e) => {
+                      if (e.target.files[0] !== undefined) {
+                        setFieldValue("banner", e.target.files[0]);
+                        setUserInfo({
+                          ...userInfo,
+                          banner: e.target.files[0],
+                        });
+                      }
+                    }}
+                  />
+                </label>
+              </div>
               <div className="update-form_avatar">
                 <label htmlFor="icon-button-file">
-                  {values.avatar ? (
-                    <PreviewImage file={values.avatar} />
-                  ) : (
-                    <PreviewImage file={userImg} />
+                  {values && (
+                    <PreviewImage
+                      file={
+                        values.avatar.url === "" ? { userImg } : values.avatar
+                      }
+                    />
                   )}
                   <input
                     accept="image/*"
@@ -138,6 +231,10 @@ const UpdateUserForm = () => {
                     onChange={(e) => {
                       if (e.target.files[0] !== undefined) {
                         setFieldValue("avatar", e.target.files[0]);
+                        setUserInfo({
+                          ...userInfo,
+                          avatar: e.target.files[0],
+                        });
                       }
                     }}
                   />
@@ -213,31 +310,44 @@ const UpdateUserForm = () => {
               </div>
             </div>
             <SubmitButton type="submit" variant="contained" disabled={!dirty}>
-              Thay đổi
+              {isLoading ? <Spinner style={{ color: "white" }} /> : "Thay đổi"}
             </SubmitButton>
           </Form>
         )}
       </Formik>
-      <ToastContainer
-        position="bottom-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
       <ToastContainer />
     </>
   );
 };
 
-const UPLOAD_AVATAR = gql`
-  mutation uploadFileToDtb($avatar: Upload!) {
-    uploadFileToDtb(file: $avatar) {
-      url
+const GET_USER = gql`
+  query ($userId: ID!) {
+    getUser(userId: $userId) {
+      id
+      username
+      email
+      avatar {
+        url
+      }
+      banner {
+        url
+      }
+      followedPosts {
+        id
+      }
+      role
+    }
+  }
+`;
+const UPLOAD_IMG = gql`
+  mutation uploadUserImg($avatar: ImageInputs, $banner: ImageInputs) {
+    uploadUserImg(avatar: $avatar, banner: $banner) {
+      avatar {
+        url
+      }
+      banner {
+        url
+      }
     }
   }
 `;

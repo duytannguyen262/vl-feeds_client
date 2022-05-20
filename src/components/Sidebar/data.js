@@ -2,6 +2,7 @@ import bookMarkIcon from "../../assets/icons/bookmark.svg";
 import homeIcon from "../../assets/icons/home.svg";
 import starIcon from "../../assets/icons/star.svg";
 import usersIcon from "../../assets/icons/users.svg";
+import followingIcon from "../../assets/icons/following.svg";
 
 export const data = [
   {
@@ -12,9 +13,9 @@ export const data = [
   },
   {
     id: "2",
-    title: "Đang theo dõi",
+    title: "Bài viết đã lưu",
     imgSrc: bookMarkIcon,
-    link: "/following",
+    link: "/saved-posts",
   },
   {
     id: "3",
@@ -22,10 +23,17 @@ export const data = [
     imgSrc: starIcon,
     link: "/eligible-posts",
   },
-];
-export const privateData = [
   {
     id: "4",
+    title: "Đã theo dõi",
+    imgSrc: followingIcon,
+    link: "/followed-users",
+  },
+];
+
+export const privateData = [
+  {
+    id: "5",
     title: "Quản lý người dùng",
     imgSrc: usersIcon,
     link: "/users",

@@ -1,0 +1,91 @@
+.singleUser-top {
+  &-banner {
+    & img {
+      border-radius: 10px;
+      height: 350px;
+      object-fit: cover;
+    }
+  }
+
+  &-userInfo {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    transform: translateY(-50px);
+
+    padding: 0 60px;
+    &-avatar {
+      width: 200px;
+      height: 200px;
+
+      & img {
+        border-radius: 50%;
+        object-fit: cover;
+      }
+    }
+
+    &-detail {
+      transform: translateY(5px);
+      &_username {
+        font-size: 2rem;
+        font-weight: 600;
+        color: rgb(35, 44, 51);
+        margin-bottom: 5px;
+      }
+
+      &_email {
+        font-size: 1.1rem;
+        font-weight: 500;
+        color: #8f8f8f;
+        line-height: 1;
+      }
+
+      &_numbers {
+        margin-top: 10px;
+        font-size: 1.1rem;
+        font-weight: 500;
+        color: rgb(83, 100, 113, 82%);
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+
+        &-posted {
+          margin-bottom: 5px;
+        }
+      }
+    }
+  }
+}
+
+.styled-number {
+  color: black;
+  font-size: 1.4rem;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.followed {
+  background-color: white !important;
+  border: 2px solid #0072f5 !important;
+  color: #0072f5 !important;
+  box-shadow: none !important;
+  font-weight: 500 !important;
+}
+
+@media screen and (max-width: 860px) {
+  .singleUser-top {
+    &-userInfo {
+      flex-direction: column;
+
+      &-detail {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+      }
+    }
+  }
+}

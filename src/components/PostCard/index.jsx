@@ -5,9 +5,15 @@ import moment from "moment";
 import "moment/locale/vi";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 import { TabContent, TabPane } from "reactstrap";
+import { useNavigate } from "react-router-dom";
+import { Modal, useModal } from "@nextui-org/react";
 
 import filledFollowIcon from "../../assets/icons/bookmark-filled.svg";
+import arrowIcon from "../../assets/icons/angle-right-for-slide.svg";
 import followIcon from "../../assets/icons/bookmark.svg";
 import answerIcon from "../../assets/icons/comment-check.svg";
 import commentIcon from "../../assets/icons/comment.svg";
@@ -22,9 +28,16 @@ import VoteButtons from "./components/VoteButtons";
 import "./styles.scss";
 
 const PostCard = (props) => {
-  const { id, body, createdAt, author, categories, commentCount, answers } =
-    props.post;
-
+  const {
+    id,
+    body,
+    createdAt,
+    author,
+    categories,
+    commentCount,
+    answers,
+    pictures,
+  } = props.post;
   const getUserFollowedPosts = useQuery(FETCH_FOLLOWED_POSTS);
 
   const user = useSelector((state) => state.auth.user);
@@ -64,11 +77,49 @@ const PostCard = (props) => {
   const handleFollow = async () => {
     await followPost();
   };
+  const [isReadMoreShown, setIsReadMoreShown] = useState(false);
+
+  const PrevArrow = (props) => {
+    const { onClick } = props;
+    return (
+      <button className="slideBtn prevBtn" onClick={onClick}>
+        <img src={arrowIcon} alt="" />
+      </button>
+    );
+  };
+  const NextArrow = (props) => {
+    const { onClick } = props;
+    return (
+      <button className="slideBtn nextBtn" onClick={onClick}>
+        <img src={arrowIcon} alt="" />
+      </button>
+    );
+  };
+  const slickSettings = {
+    dots: false,
+    infinite: false,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    prevArrow: <PrevArrow />,
+    nextArrow: <NextArrow />,
+  };
+
+  const [clickedImage, setClickedImage] = useState(null);
+  const { setVisible, bindings } = useModal();
+  const handleOpenFullImg = (e) => {
+    setClickedImage(e.target.src);
+    setVisible(true);
+  };
+
+  const navigate = useNavigate();
+  const handleUserClick = () => {
+    navigate(`/user/${author.id}`);
+  };
 
   return (
     <div className="postCard">
       {user && (
-        <Tooltip title="Theo dõi bài góp ý" placement="right">
+        <Tooltip title="Lưu" placement="right">
           <div className="postCard-follow" onClick={handleFollow}>
             <img
               src={isFollowed() ? filledFollowIcon : followIcon}
@@ -81,13 +132,14 @@ const PostCard = (props) => {
       <div className="postCard-inner">
         <div className="postCard-votes">
           <VoteButtons {...props} user={user} />
-          {user && user.username === author.username && (
-            <DeletePost postId={id} />
-          )}
+          {user &&
+            (user.username === author.username || user.role === "admin") && (
+              <DeletePost postId={id} />
+            )}
         </div>
         <div className="postCard-content">
-          <div className="postCard-content_header">
-            <img src={author.avatar ? author.avatar : userImg} alt="" />
+          <div className="postCard-content_header" onClick={handleUserClick}>
+            <img src={author.avatar.url ? author.avatar.url : userImg} alt="" />
             <div className="postCard-content_header--userInfo">
               <p className="authorName">{author.username}</p>
               <span
@@ -100,7 +152,18 @@ const PostCard = (props) => {
             </div>
           </div>
           <div className="postCard-content_body">
-            <p>{body}</p>
+            <p>
+              {isReadMoreShown ? body : body.substr(0, 300)}
+              {body.length > 300 && (
+                <Button
+                  color="primary"
+                  className="readMoreBtn"
+                  onClick={() => setIsReadMoreShown(!isReadMoreShown)}
+                >
+                  {isReadMoreShown ? "Thu gọn" : "Xem thêm ..."}
+                </Button>
+              )}
+            </p>
             {categories &&
               categories.map((category) => (
                 <Chip
@@ -115,6 +178,30 @@ const PostCard = (props) => {
                   }}
                 />
               ))}
+            {pictures.length > 0 && (
+              <div className="slides-container">
+                <Slider {...slickSettings}>
+                  {pictures.map((picture, index) => (
+                    <div
+                      key={index}
+                      className="slide-item"
+                      onClick={handleOpenFullImg}
+                    >
+                      <img src={picture.url} alt="" />
+                    </div>
+                  ))}
+                </Slider>
+              </div>
+            )}
+            <Modal
+              width="700px"
+              css={{ margin: "2rem" }}
+              aria-labelledby="modal-title"
+              aria-describedby="modal-description"
+              {...bindings}
+            >
+              <img src={clickedImage} alt="" />
+            </Modal>
             <div className="postCard-content_body--counts">
               <Button
                 onClick={openComments}

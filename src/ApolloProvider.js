@@ -25,13 +25,23 @@ const cache = new InMemoryCache({
     Query: {
       fields: {
         posts: {
-          merge(existing, incoming) {
-            return incoming;
-          },
-        },
-        getPosts: {
-          merge(existing, incoming) {
-            return incoming;
+          keyArgs: false,
+          merge(existing, incoming, { readField, args }) {
+            const { after } = args;
+            if (after) {
+              const existingEdges = existing.edges;
+              const incomingEdges = incoming.edges;
+              const mergedEdges = [...existingEdges, ...incomingEdges];
+              return {
+                ...incoming,
+                edges: mergedEdges,
+              };
+            }
+            return {
+              ...incoming,
+              edges: readField("edges", incoming),
+              pageInfo: readField("pageInfo", incoming),
+            };
           },
         },
       },
@@ -54,6 +64,15 @@ const cache = new InMemoryCache({
           },
         },
         answers: {
+          merge(existing, incoming) {
+            return incoming;
+          },
+        },
+      },
+    },
+    User: {
+      fields: {
+        followers: {
           merge(existing, incoming) {
             return incoming;
           },

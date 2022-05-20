@@ -3,6 +3,7 @@
 
   & .page-content {
     flex: 4;
+    width: 80%;
   }
 
   & .sideBar_container {
@@ -19,7 +20,7 @@
   }
 }
 
-@media (max-width: 850px) {
+@media (max-width: 995px) {
   .main {
     flex-wrap: wrap;
     & .sideBar_container {

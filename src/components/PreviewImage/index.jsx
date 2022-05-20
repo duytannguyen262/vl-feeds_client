@@ -7,9 +7,17 @@ const PreviewImage = ({ file }) => {
   useEffect(() => {
     if (file) {
       const reader = new FileReader();
-      if (typeof file === "string") {
-        setPreview(file);
-      } else if (file.type.match("image.*")) {
+      if (file.bannerImg) {
+        setPreview(file.bannerImg);
+      }
+      if (file.userImg) {
+        setPreview(file.userImg);
+      }
+      if (file.url && file.url !== "") {
+        setPreview(file.url);
+      }
+
+      if (file.type && file.type.match("image.*")) {
         reader.readAsDataURL(file);
         reader.onloadend = () => {
           setPreview(reader.result);

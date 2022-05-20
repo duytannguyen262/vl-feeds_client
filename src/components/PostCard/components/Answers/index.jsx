@@ -25,7 +25,9 @@ const Answers = ({ postId, isAnswersOpen, answers }) => {
           return (
             <div key={answer.id} className="comment">
               <img
-                src={answer.author.avatar ? answer.author.avatar : userImg}
+                src={
+                  answer.author.avatar.url ? answer.author.avatar.url : userImg
+                }
                 alt=""
               />
               <div className="comment_info">

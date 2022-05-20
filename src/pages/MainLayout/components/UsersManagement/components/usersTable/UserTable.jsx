@@ -10,7 +10,7 @@ import "./usersTable.scss";
 import { Button, FormControl, MenuItem, Select } from "@mui/material";
 
 export default function DataTable() {
-  const { refetch, data } = useQuery(GET_USERS);
+  const { refetch, data, loading } = useQuery(GET_USERS);
   const [userRows, setUserRows] = React.useState([]);
   const [toUpdateUserRows, setToUpdateUserRows] = React.useState([]);
   const [selectedRowIds, setSelectedRowIs] = React.useState([]);
@@ -42,7 +42,10 @@ export default function DataTable() {
       renderCell: (params) => {
         return (
           <div className="cellWrapper">
-            <img src={params.row.avatar ? params.row.avatar : userImg} alt="" />
+            <img
+              src={params.row.avatar.url ? params.row.avatar.url : userImg}
+              alt=""
+            />
             <span style={{ fontWeight: "500" }}>{params.row.username}</span>
           </div>
         );
@@ -104,7 +107,9 @@ export default function DataTable() {
           return {
             id: user.id,
             username: user.username,
-            avatar: user.avatar,
+            avatar: {
+              url: user.avatar.url,
+            },
             role: user.role,
             email: user.email,
             createdAt: user.createdAt,
@@ -181,6 +186,7 @@ export default function DataTable() {
         rowsPerPageOptions={[20]}
         density="comfortable"
         checkboxSelection
+        loading={loading}
         sx={{
           boxShadow: "0 6px 18px 0 rgb(32 32 149 / 10%)",
           border: "none",
@@ -200,7 +206,9 @@ const GET_USERS = gql`
       id
       username
       email
-      avatar
+      avatar {
+        url
+      }
       role
       createdAt
     }

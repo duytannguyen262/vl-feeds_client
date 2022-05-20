@@ -8,6 +8,7 @@ import PrivateAdminRoute from "../../util/PrivateAdminRoute";
 import PrivateUserRoute from "../../util/PrivateUserRoute";
 import EligiblePosts from "./components/EligiblePosts";
 import FollowedPosts from "./components/FollowedPosts";
+import FollowedUsers from "./components/FollowedUsers";
 import Home from "./components/Home";
 import UsersManagement from "./components/UsersManagement";
 
@@ -22,8 +23,9 @@ const MainLayout = () => {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/*" element={<PrivateUserRoute />}>
-              <Route path="following" element={<FollowedPosts />} />
+              <Route path="saved-posts" element={<FollowedPosts />} />
               <Route path="eligible-posts" element={<EligiblePosts />} />
+              <Route path="followed-users" element={<FollowedUsers />} />
               <Route
                 path="users"
                 element={

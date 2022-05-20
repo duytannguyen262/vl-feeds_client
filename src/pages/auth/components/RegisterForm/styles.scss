@@ -1,0 +1,21 @@
+.registedSuccess-modal {
+  &_container {
+    padding: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    & h3 {
+      font-size: 20px;
+      font-weight: 500;
+      margin-bottom: 20px;
+    }
+  }
+
+  &_gif {
+    width: 150px;
+    height: 150px;
+    margin-bottom: 20px;
+  }
+}

@@ -1,6 +1,9 @@
 import { useQuery } from "@apollo/client";
+import { Button } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { motion } from "framer-motion";
+
 import PostCard from "../../../../components/PostCard";
 import SkeletonPost from "../../../../components/SkeletonPost";
 import { FETCH_POSTS_QUERY } from "../../../../util/graphql";
@@ -8,17 +11,9 @@ import PostForm from "../PostForm";
 import "./styles.scss";
 
 const Home = () => {
-  // const { loading, data, fetchMore, updateQuery } = useQuery(
-  //   FETCH_POSTS_PAGINATION,
-  //   {
-  //     variables: {
-  //       first: 2,
-  //     },
-  //   }
-  // );
-  const { loading, data } = useQuery(FETCH_POSTS_QUERY, {
+  const { loading, data, fetchMore } = useQuery(FETCH_POSTS_QUERY, {
     variables: {
-      first: 2,
+      limit: 15,
     },
   });
   const user = useSelector((state) => state.auth.user);
@@ -52,11 +47,21 @@ const Home = () => {
           });
         });
       };
-      // setPosts(filterPosts(data.posts.edges.map((post) => post.node)));
-      setPosts(filterPosts(data.getPosts));
+      setPosts(filterPosts(data.posts.edges.map((edge) => edge.node)));
+    } else {
+      setPosts([]);
     }
-  }, [data, searchValues]);
+  }, [data, searchValues, loading]);
 
+  const handleFetchMoreClick = () => {
+    const { startCursor } = data.posts.pageInfo;
+    fetchMore({
+      variables: {
+        limit: 15,
+        after: startCursor,
+      },
+    });
+  };
   return (
     <div className="page-content">
       {user && <PostForm />}
@@ -67,34 +72,17 @@ const Home = () => {
         </div>
       ) : (
         <div>
-          {posts.map((post) => {
-            return <PostCard post={post} key={post.id} />;
-          })}
-          {/* {data.posts && data.posts.pageInfo.hasNextPage && (
-            <Button>
-              <span
-                onClick={() => {
-                  fetchMore({
-                    variables: { after: data.posts.pageInfo.startCursor },
-                  });
-                  updateQuery((prev, { fetchMoreResult }) => {
-                    if (!fetchMoreResult) return prev;
-                    return {
-                      posts: {
-                        ...fetchMoreResult.posts,
-                        edges: [
-                          ...prev.posts.edges,
-                          ...fetchMoreResult.posts.edges,
-                        ],
-                      },
-                    };
-                  });
-                }}
-              >
-                Tải thêm
-              </span>
-            </Button>
-          )} */}
+          {posts.length > 0 &&
+            posts.map((post) => {
+              return <PostCard post={post} key={post.id} />;
+            })}
+          {posts.length > 0 && data.posts.pageInfo.hasNextPage && (
+            <div className="d-flex justify-content-center">
+              <Button sx={{ padding: "10px 20px", color: "#666666be" }}>
+                <span onClick={handleFetchMoreClick}>Tải thêm</span>
+              </Button>
+            </div>
+          )}
         </div>
       )}
     </div>

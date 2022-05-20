@@ -62,7 +62,7 @@ const ResponseInput = ({ postId }) => {
                   onChange={handleChange}
                   onBlur={handleBlur}
                 ></FastField>
-                {user.role === "teacher" && (
+                {(user.role === "teacher" || user.role === "admin") && (
                   <Tooltip title="Gửi câu trả lời">
                     <Button
                       type="button"
@@ -111,7 +111,9 @@ const CREATE_COMMENT_MUTATION = gql`
         createdAt
         author {
           username
-          avatar
+          avatar {
+            url
+          }
         }
       }
       commentCount
@@ -129,7 +131,9 @@ const CREATE_ANSWER_MUTATION = gql`
         createdAt
         author {
           username
-          avatar
+          avatar {
+            url
+          }
         }
       }
     }

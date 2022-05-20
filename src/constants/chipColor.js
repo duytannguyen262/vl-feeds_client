@@ -1,7 +1,7 @@
 export const chipColor = (value) => {
   switch (value) {
     case "Giảng viên":
-      return "#00e676";
+      return "#c490e4";
     case "Cơ sở vật chất":
       return "#FFA5A5";
     case "Sự kiện":

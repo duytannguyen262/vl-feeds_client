@@ -33,29 +33,18 @@ const DeletePost = ({ postId }) => {
 
   const [deletePost] = useMutation(DELETE_POST_MUTATION, {
     update(proxy) {
-      //remove deleted post from cache
-      // const data = proxy.readQuery({
-      //   query: FETCH_POSTS_PAGINATION,
-      //   variables: {
-      //     first: 2,
-      //   },
-      // });
-      // proxy.writeQuery({
-      //   query: FETCH_POSTS_PAGINATION,
-      //   data: {
-      //     posts: {
-      //       edges: data.posts.edges.filter((post) => post.id !== postId),
-      //     },
-      //   },
-      // });
       const data = proxy.readQuery({
         query: FETCH_POSTS_QUERY,
       });
-
       proxy.writeQuery({
         query: FETCH_POSTS_QUERY,
         data: {
-          getPosts: data.getPosts.filter((post) => post.id !== postId),
+          posts: {
+            ...data.posts,
+            edges: data.posts.edges.filter((edge) => {
+              return edge.node.id !== postId;
+            }),
+          },
         },
       });
       handleClose();

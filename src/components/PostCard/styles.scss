@@ -1,5 +1,6 @@
 $button-bg: #ff4546;
 .postCard {
+  position: relative;
   margin-bottom: 25px;
   box-shadow: 0 6px 18px 0 rgba(32, 32, 149, 0.102);
   width: 90%;
@@ -7,7 +8,6 @@ $button-bg: #ff4546;
   border-radius: 20px;
 
   margin-bottom: 25px;
-  position: relative;
 
   &-follow {
     position: absolute;
@@ -107,10 +107,13 @@ $button-bg: #ff4546;
   }
 
   &-inner {
-    padding: 25px;
+    padding: 25px 40px;
     padding-bottom: 10px;
     display: flex;
-    gap: 20px;
+    justify-content: center;
+    gap: 10px;
+
+    width: 100%;
   }
 
   &-votes {
@@ -118,6 +121,8 @@ $button-bg: #ff4546;
     align-items: center;
     flex-direction: column;
     gap: 5px;
+
+    width: 10%;
 
     & img {
       width: 30px;
@@ -133,17 +138,25 @@ $button-bg: #ff4546;
   }
 
   &-content {
-    width: 100%;
+    width: 90%;
 
     &_header {
       display: flex;
       align-items: center;
       gap: 15px;
-      margin-bottom: 20px;
+
+      width: fit-content;
+      padding: 10px;
+      border-radius: 20px;
+
+      &:hover {
+        background-color: #f5f5f5;
+        cursor: pointer;
+      }
 
       & img {
-        width: 55px;
-        height: 55px;
+        width: 60px;
+        height: 60px;
         object-fit: cover;
         border-radius: 10px;
       }
@@ -176,10 +189,12 @@ $button-bg: #ff4546;
     }
 
     &_body {
+      width: 100%;
       & p {
-        font-size: 16px;
+        white-space: pre-wrap;
+        font-size: 1rem;
         line-height: 1.5;
-        margin-bottom: 20px;
+        margin: 10px 0;
       }
 
       &--counts {
@@ -285,5 +300,62 @@ $button-bg: #ff4546;
 }
 
 .tab-pane {
-  padding: 0 20px 20px 20px;
+  padding: 0 20px 0px 20px;
+}
+
+.readMoreBtn {
+  padding: 0 5px;
+  border: none;
+  background: none !important;
+  font-size: 14px;
+  font-weight: 500;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.slides-container {
+  width: 100%;
+  position: relative;
+  margin-bottom: 5px;
+
+  &:hover .slideBtn {
+    opacity: 1;
+    visibility: visible;
+    transition: all 0.5s ease-in-out;
+  }
+}
+.slide-item {
+  border-radius: 20px;
+  cursor: pointer;
+
+  & img {
+    border-radius: 20px;
+    height: 500px;
+    object-fit: cover;
+  }
+}
+
+.slideBtn {
+  position: absolute;
+  opacity: 0;
+  visibility: hidden;
+
+  width: 50px;
+  height: 100px;
+  border: none;
+  background: transparent;
+
+  &.prevBtn {
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%) scaleX(-1);
+    z-index: 2;
+  }
+  &.nextBtn {
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+  }
 }

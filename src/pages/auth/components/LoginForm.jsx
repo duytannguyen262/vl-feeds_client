@@ -46,6 +46,7 @@ const LoginForm = () => {
   });
 
   const submitForm = async (newValues) => {
+    console.log(newValues);
     await loginUser({
       variables: newValues,
     });
@@ -113,7 +114,17 @@ const LOGIN_USER = gql`
       username
       createdAt
       token
-      avatar
+      avatar {
+        url
+        public_id
+      }
+      banner {
+        url
+        public_id
+      }
+      followings {
+        id
+      }
       role
     }
   }
