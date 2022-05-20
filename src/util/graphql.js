@@ -78,7 +78,7 @@ export const FETCH_POST_COMMENTS = gql`
 `;
 
 export const FETCH_USER_QUERY = gql`
-  query ($userId: ID!) {
+  query getUser($userId: ID!) {
     getUser(userId: $userId) {
       id
       username

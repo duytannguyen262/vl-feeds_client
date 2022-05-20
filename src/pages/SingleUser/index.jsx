@@ -21,7 +21,9 @@ const SingleUser = () => {
         {loading ? (
           <Loading className="d-flex align-center justify-content-center" />
         ) : (
-          <SingleUserMainContent user={data.getUser} />
+          <>
+            <SingleUserMainContent user={data.getUser} />
+          </>
         )}
       </div>
     </motion.div>
