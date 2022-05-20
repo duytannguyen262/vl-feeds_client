@@ -2,7 +2,6 @@ import { useQuery } from "@apollo/client";
 import { Button } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { motion } from "framer-motion";
 
 import PostCard from "../../../../components/PostCard";
 import SkeletonPost from "../../../../components/SkeletonPost";
