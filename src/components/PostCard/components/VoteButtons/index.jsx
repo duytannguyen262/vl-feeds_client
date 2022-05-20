@@ -12,9 +12,6 @@ const VoteButtons = ({
 }) => {
   const [voted, setVoted] = useState(false);
   const [devoted, setDevoted] = useState(false);
-  const [reputationCount, setReputationCount] = useState(
-    votes.length - devotes.length
-  );
 
   useEffect(() => {
     if (user && votes.find((vote) => vote.username === user.username)) {
@@ -26,7 +23,6 @@ const VoteButtons = ({
   }, [user, votes, devotes]);
 
   const [votePost] = useMutation(VOTE_POST_MUTATION, {
-    update(proxy, result) {},
     variables: {
       postId: id,
     },
@@ -43,7 +39,6 @@ const VoteButtons = ({
       if (voted) {
         votePost();
         setVoted(false);
-        setReputationCount(reputationCount - 1);
       } else {
         if (devoted) {
           devotePost();
@@ -51,7 +46,6 @@ const VoteButtons = ({
         }
         votePost();
         setVoted(true);
-        setReputationCount(reputationCount + 1);
       }
     }
   };
@@ -61,7 +55,6 @@ const VoteButtons = ({
       if (devoted) {
         devotePost();
         setDevoted(false);
-        setReputationCount(reputationCount + 1);
       } else {
         if (voted) {
           votePost();
@@ -69,7 +62,6 @@ const VoteButtons = ({
         }
         devotePost();
         setDevoted(true);
-        setReputationCount(reputationCount - 1);
       }
     }
   };
@@ -86,7 +78,9 @@ const VoteButtons = ({
           />
         </Button>
       </Tooltip>
-      <span className="postCard-votes_count">{reputationCount}</span>
+      <span className="postCard-votes_count">
+        {votes.length - devotes.length}
+      </span>
       <Tooltip title="Không ủng hộ" placement="right">
         <Button>
           <img

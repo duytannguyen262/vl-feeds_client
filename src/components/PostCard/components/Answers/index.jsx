@@ -6,6 +6,7 @@ import { IconButton, Tooltip } from "@mui/material";
 import trashIcon from "../../../../assets/icons/trash.svg";
 import userImg from "../../../../assets/user.png";
 import ConfirmModal from "../../../ConfirmModal";
+import { useNavigate } from "react-router-dom";
 
 const Answers = ({ postId, isAnswersOpen, answers }) => {
   const [open, setOpen] = React.useState(false);
@@ -13,6 +14,7 @@ const Answers = ({ postId, isAnswersOpen, answers }) => {
 
   const user = useSelector((state) => state.auth.user);
 
+  const navigate = useNavigate();
   return (
     <div>
       {isAnswersOpen &&
@@ -29,6 +31,7 @@ const Answers = ({ postId, isAnswersOpen, answers }) => {
                   answer.author.avatar.url ? answer.author.avatar.url : userImg
                 }
                 alt=""
+                onClick={() => navigate(`/user/${answer.author.id}`)}
               />
               <div className="comment_info">
                 <div className="comment_header">

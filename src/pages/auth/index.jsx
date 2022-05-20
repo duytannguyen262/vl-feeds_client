@@ -5,6 +5,7 @@ import { NavLink, Route, Routes, useNavigate } from "react-router-dom";
 
 import authBanner from "../../assets/authBanner.jpg";
 import backIcon from "../../assets/icons/angle-left-white.svg";
+import vlfeedsLogo from "../../assets/logo.png";
 import vluLogo from "../../assets/vluLogo.png";
 import LoginForm from "./components/LoginForm";
 import RegisterForm from "./components/RegisterForm";
@@ -33,7 +34,9 @@ const AuthPage = () => {
           <div className="backToHomeBtn_img">
             <img src={backIcon} alt="" />
           </div>
-          <span>Về trang chủ</span>
+          <div className="backToHomeBtn_logo">
+            <img src={vlfeedsLogo} alt="" />
+          </div>
         </Button>
       </div>
       <div className="auth-form_container">

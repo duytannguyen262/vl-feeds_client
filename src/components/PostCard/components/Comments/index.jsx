@@ -3,6 +3,7 @@ import { IconButton, Tooltip } from "@mui/material";
 import moment from "moment";
 import React from "react";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 import trashIcon from "../../../../assets/icons/trash.svg";
 import userImg from "../../../../assets/user.png";
@@ -34,6 +35,7 @@ const Comments = ({ isCommentsOpen, postId }) => {
     return null;
   };
 
+  const navigate = useNavigate();
   const comments = () => {
     if (isCommentsOpen && data !== undefined) {
       return data.getPost.comments.map((comment) => {
@@ -52,6 +54,7 @@ const Comments = ({ isCommentsOpen, postId }) => {
                     : userImg
                 }
                 alt=""
+                onClick={() => navigate(`/user/${comment.author.id}`)}
               />
               <div className="comment_info">
                 <div className="comment_header">

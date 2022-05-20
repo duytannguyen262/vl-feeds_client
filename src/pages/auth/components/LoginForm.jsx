@@ -46,7 +46,6 @@ const LoginForm = () => {
   });
 
   const submitForm = async (newValues) => {
-    console.log(newValues);
     await loginUser({
       variables: newValues,
     });
