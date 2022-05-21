@@ -6,8 +6,6 @@ import "moment/locale/vi";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
 import { TabContent, TabPane } from "reactstrap";
 import { useNavigate } from "react-router-dom";
 import { Modal, useModal } from "@nextui-org/react";

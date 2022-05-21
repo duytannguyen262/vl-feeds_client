@@ -51,7 +51,13 @@ const SelectChipField = (props) => {
           input={<OutlinedInput id="select-multiple-chip" label={label} />}
           renderValue={(selected) => {
             return (
-              <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  gap: 0.5,
+                }}
+              >
                 {selected.map((value) => {
                   return (
                     <Chip

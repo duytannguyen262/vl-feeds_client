@@ -11,6 +11,10 @@ const PostInputField = (props) => {
     <div className="postForm_modal_text-area mb-3">
       <TextareaAutosize
         className={`form-control`}
+        style={{
+          maxHeight: "150px",
+          overflow: "scroll",
+        }}
         type="text"
         {...field}
         {...props}

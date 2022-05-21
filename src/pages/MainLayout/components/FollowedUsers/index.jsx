@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 
 import bestFriendImg from "../../../../assets/best-friends.png";
 import PostCard from "../../../../components/PostCard";
+import UsersListSlide from "../../../../components/UsersListSlide";
 import PostForm from "../PostForm";
 const FollowedUsers = () => {
   const user = useSelector((state) => state.auth.user);
@@ -23,12 +24,14 @@ const FollowedUsers = () => {
 
   useEffect(() => {
     refetch();
-    console.log(getUsersQuery.data);
-  }, [refetch, getUsersQuery]);
+  }, [refetch]);
 
   return (
     <div className="page-content">
       {user && <PostForm />}
+      {!getUsersQuery.loading && (
+        <UsersListSlide users={getUsersQuery.data.getUsers} />
+      )}
       <div>
         {user.followings.length === 0 && (
           <div className="notFollowed-info">

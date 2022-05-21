@@ -1,0 +1,46 @@
+.usersListSlide {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
+  background-color: rgb(255, 69, 70, 0.8);
+  box-shadow: 0 4px 14px rgb(255, 69, 70, 0.3);
+  border-radius: 20px;
+  margin-bottom: 20px;
+
+  padding: 20px 0;
+  &-header {
+    & h1 {
+      color: #fff;
+      font-weight: 500;
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+    }
+  }
+
+  &-item {
+    &-avatar {
+      margin: 0 auto;
+      width: 60px;
+      height: 60px;
+      margin-bottom: 10px;
+      cursor: pointer;
+
+      & img {
+        border-radius: 50%;
+        object-fit: cover;
+      }
+    }
+  }
+
+  &-sliderContainer {
+    width: 40%;
+  }
+}
+
+@media (min-width: 1000px) {
+  .usersListSlide {
+    margin: 0 45px 30px;
+  }
+}

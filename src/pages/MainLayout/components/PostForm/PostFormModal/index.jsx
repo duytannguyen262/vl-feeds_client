@@ -22,6 +22,10 @@ const style = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: "80%",
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+  alignItems: "center",
   bgcolor: "background.paper",
   border: "none",
   boxShadow: 24,
@@ -131,6 +135,14 @@ const PostFormModal = React.forwardRef((props, ref) => {
     }
   };
 
+  const handleRemoveImageFromList = (image) => {
+    setPreviewImages(
+      [...previewImages].filter((previewImage) => {
+        return previewImage.name !== image.name;
+      })
+    );
+  };
+
   return (
     <Box sx={style} className="postForm_modal" open={open}>
       <ToastContainer />
@@ -165,8 +177,8 @@ const PostFormModal = React.forwardRef((props, ref) => {
                     type="file"
                     onChange={(e) => {
                       if (e.target.files[0] !== undefined) {
-                        setFieldValue("files", e.target.files);
                         setPreviewImages(e.target.files);
+                        setFieldValue("files", e.target.files);
                       }
                     }}
                   />
@@ -181,13 +193,28 @@ const PostFormModal = React.forwardRef((props, ref) => {
                 </label>
                 {previewImages.length > 0 && (
                   <ImageList
-                    sx={{ height: 300 }}
+                    sx={{ height: 180 }}
                     cols={3}
                     rowHeight={164}
                     className="mb-3"
                   >
                     {Array.from(previewImages).map((image, index) => (
-                      <ImageListItem key={index}>
+                      <ImageListItem
+                        key={index}
+                        onClick={() => {
+                          handleRemoveImageFromList(image);
+                          setFieldValue(
+                            "files",
+                            [...values.files].filter((file) => {
+                              return file.name !== image.name;
+                            })
+                          );
+                        }}
+                        className="postForm_modal-image_list_item"
+                      >
+                        <div className="overlay">
+                          <img src={crossIcon} alt="" />
+                        </div>
                         <img src={URL.createObjectURL(image)} alt="" />
                       </ImageListItem>
                     ))}

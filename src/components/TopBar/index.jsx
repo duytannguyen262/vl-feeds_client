@@ -113,7 +113,9 @@ const TopBar = () => {
                 MenuListProps={{
                   "aria-labelledby": "basic-button",
                 }}
-                style={{ transform: "translateX(-20px)" }}
+                style={{
+                  transform: "translateX(-20px)",
+                }}
               >
                 <MenuItem
                   onClick={() => {

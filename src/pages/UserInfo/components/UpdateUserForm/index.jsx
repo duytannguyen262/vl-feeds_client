@@ -49,7 +49,9 @@ const UpdateUserForm = () => {
   useEffect(() => {
     if (data) {
       setUserInfo(data.getUser);
+      console.log(data);
     }
+    return () => toast.dismiss();
   }, [data]);
 
   const validate = Yup.object({
@@ -115,31 +117,30 @@ const UpdateUserForm = () => {
           };
         }
       };
-      const avatarUrl = await upload(avatar);
-      const bannerUrl = await upload(banner);
-      if (avatarUrl || bannerUrl) {
-        if (avatarUrl) {
-          await uploadFile({
-            variables: {
-              avatar: {
-                url: avatarUrl.url,
-                public_id: avatarUrl.public_id,
-              },
+      if (avatar.name) {
+        const avatarUrl = await upload(avatar);
+        await uploadFile({
+          variables: {
+            avatar: {
+              url: avatarUrl.url,
+              public_id: avatarUrl.public_id,
             },
-          });
-        }
-        if (bannerUrl) {
-          await uploadFile({
-            variables: {
-              banner: {
-                url: bannerUrl.url,
-                public_id: bannerUrl.public_id,
-              },
-            },
-          });
-        }
-        setIsLoading(false);
+          },
+        });
       }
+
+      if (banner.name) {
+        const bannerUrl = await upload(banner);
+        await uploadFile({
+          variables: {
+            banner: {
+              url: bannerUrl.url,
+              public_id: bannerUrl.public_id,
+            },
+          },
+        });
+      }
+      setIsLoading(false);
     }
     if (oldPassword && newPassword && confirmNewPassword) {
       changePassword({
