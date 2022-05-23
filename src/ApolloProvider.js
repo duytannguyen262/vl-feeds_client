@@ -10,7 +10,7 @@ import { setContext } from "apollo-link-context";
 const uploadLink = createUploadLink({
   //http://localhost:5000/graphql
   //https://vanlangfeeds-server.herokuapp.com/graphql
-  uri: "http://localhost:5000/graphql",
+  uri: "https://vanlangfeeds-server.herokuapp.com/graphql",
 });
 
 const authLink = setContext(() => {
