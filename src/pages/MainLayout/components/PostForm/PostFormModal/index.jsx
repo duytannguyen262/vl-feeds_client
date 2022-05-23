@@ -263,6 +263,7 @@ const CREATE_POST_MUTATION = gql`
         username
         avatar {
           url
+          public_id
         }
         role
       }

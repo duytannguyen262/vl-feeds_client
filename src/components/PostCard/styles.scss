@@ -10,15 +10,12 @@ $button-bg: #ff4546;
   margin-bottom: 25px;
 
   &-follow {
-    position: absolute;
-    top: 20px;
-    right: 25px;
-    padding: 10px 10px;
+    padding: 10px;
     cursor: pointer;
 
-    & img {
-      width: 25px;
-      height: 25px;
+    &_icon {
+      width: 25px !important;
+      height: 25px !important;
     }
 
     transition: all 0.2s ease-in-out;
@@ -122,8 +119,6 @@ $button-bg: #ff4546;
     flex-direction: column;
     gap: 5px;
 
-    width: 10%;
-
     & img {
       width: 30px;
       height: 30px;
@@ -140,6 +135,10 @@ $button-bg: #ff4546;
   &-content {
     width: 90%;
 
+    &_topRow {
+      display: flex;
+      justify-content: space-between;
+    }
     &_header {
       display: flex;
       align-items: center;

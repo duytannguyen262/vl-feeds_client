@@ -49,7 +49,6 @@ const UpdateUserForm = () => {
   useEffect(() => {
     if (data) {
       setUserInfo(data.getUser);
-      console.log(data);
     }
     return () => toast.dismiss();
   }, [data]);
@@ -329,9 +328,11 @@ const GET_USER = gql`
       email
       avatar {
         url
+        public_id
       }
       banner {
         url
+        public_id
       }
       followedPosts {
         id
@@ -345,9 +346,11 @@ const UPLOAD_IMG = gql`
     uploadUserImg(avatar: $avatar, banner: $banner) {
       avatar {
         url
+        public_id
       }
       banner {
         url
+        public_id
       }
     }
   }

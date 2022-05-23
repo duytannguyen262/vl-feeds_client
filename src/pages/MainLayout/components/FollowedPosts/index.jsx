@@ -23,14 +23,17 @@ const FollowedPosts = () => {
   return (
     <div className="page-content">
       {user && <PostForm />}
-      {!loading && data && data.getUser.followedPosts.length === 0 && (
-        <div className="notFollowed-info">
-          <p>Trống trơn hà, lưu một bài góp ý ngay thôi! ( •̀ ω •́ )✧</p>
-          <div>
-            <img src={catImage} alt="" />
+      {!loading &&
+        data &&
+        data.getUser.followedPosts.filter((post) => post.author !== null)
+          .length === 0 && (
+          <div className="notFollowed-info">
+            <p>Trống trơn hà, lưu một bài góp ý ngay thôi! ( •̀ ω •́ )✧</p>
+            <div>
+              <img src={catImage} alt="" />
+            </div>
           </div>
-        </div>
-      )}
+        )}
       {loading ? (
         <div>
           <SkeletonPost />
@@ -38,9 +41,11 @@ const FollowedPosts = () => {
         </div>
       ) : (
         data &&
-        data.getUser.followedPosts.map((post) => {
-          return <PostCard post={post} key={post.id} />;
-        })
+        data.getUser.followedPosts
+          .filter((post) => post.author !== null)
+          .map((post) => {
+            return <PostCard post={post} key={post.id} />;
+          })
       )}
     </div>
   );
@@ -58,11 +63,13 @@ const FETCH_FOLLOWED_POSTS = gql`
           username
           avatar {
             url
+            public_id
           }
           role
         }
         pictures {
           url
+          public_id
         }
         commentCount
         votesCount

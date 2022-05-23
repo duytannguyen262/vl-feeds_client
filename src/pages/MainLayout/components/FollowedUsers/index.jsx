@@ -29,7 +29,7 @@ const FollowedUsers = () => {
   return (
     <div className="page-content">
       {user && <PostForm />}
-      {!getUsersQuery.loading && (
+      {!getUsersQuery.loading && user.followings.length > 0 && (
         <UsersListSlide users={getUsersQuery.data.getUsers} />
       )}
       <div>
@@ -49,9 +49,11 @@ const FollowedUsers = () => {
             <Loading />
           </div>
         ) : (
-          data.getFollowedUsersPosts.map((post) => {
-            return <PostCard post={post} key={post.id} />;
-          })
+          data.getFollowedUsersPosts
+            .filter((post) => post.author !== null)
+            .map((post) => {
+              return <PostCard post={post} key={post.id} />;
+            })
         )}
       </div>
     </div>
@@ -73,6 +75,7 @@ const FETCH_USER_POSTS = gql`
         username
         avatar {
           url
+          public_id
         }
         role
       }
@@ -111,6 +114,7 @@ const FETCH_USERS = gql`
       id
       avatar {
         url
+        public_id
       }
       username
     }

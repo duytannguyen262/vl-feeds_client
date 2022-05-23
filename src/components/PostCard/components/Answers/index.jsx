@@ -28,17 +28,28 @@ const Answers = ({ postId, isAnswersOpen, answers }) => {
             <div key={answer.id} className="comment">
               <img
                 src={
-                  answer.author.avatar.url ? answer.author.avatar.url : userImg
+                  answer.author && answer.author.avatar.url
+                    ? answer.author.avatar.url
+                    : userImg
                 }
                 alt=""
                 onClick={() => navigate(`/user/${answer.author.id}`)}
               />
               <div className="comment_info">
                 <div className="comment_header">
-                  <p className="username">{answer.author.username}</p>
+                  <p className="username">
+                    {answer.author ? answer.author.username : "Ẩn danh"}
+                  </p>
                   <p className="date">{moment(answer.createdAt).fromNow()}</p>
                 </div>
-                <div className="comment_body">{answer.body}</div>
+                <div
+                  style={{
+                    fontStyle: !answer.author && "italic",
+                  }}
+                  className="comment_body"
+                >
+                  {answer.author ? answer.body : "Câu trả lời này đã bị ẩn"}
+                </div>
               </div>
               {user && user.username === answer.author.username && (
                 <Tooltip title="Xóa câu trả lời" placement="right">

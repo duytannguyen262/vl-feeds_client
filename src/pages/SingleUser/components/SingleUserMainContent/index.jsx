@@ -36,12 +36,13 @@ const SingleUserMainContent = ({ user }) => {
   const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.auth.user);
   const [isFollowed, setIsFollowed] = React.useState(null);
-
   React.useEffect(() => {
     if (
       user &&
       currentUser &&
-      user.followers.find((follower) => follower.id === currentUser.id)
+      user.followers
+        .filter((follower) => follower !== null)
+        .find((follower) => follower.id === currentUser.id)
     ) {
       setIsFollowed(true);
     } else {
@@ -162,6 +163,7 @@ const FETCH_USER_POSTS = gql`
         username
         avatar {
           url
+          public_id
         }
         role
       }
@@ -203,6 +205,7 @@ const FOLLOW_USER = gql`
         username
         avatar {
           url
+          public_id
         }
       }
     }

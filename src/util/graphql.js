@@ -45,6 +45,11 @@ export const FETCH_POSTS_QUERY = gql`
               }
             }
           }
+          points {
+            point
+            username
+            createdAt
+          }
         }
         cursor
       }
@@ -85,9 +90,11 @@ export const FETCH_USER_QUERY = gql`
       email
       avatar {
         url
+        public_id
       }
       banner {
         url
+        public_id
       }
       role
       followers {
@@ -95,6 +102,7 @@ export const FETCH_USER_QUERY = gql`
         username
         avatar {
           url
+          public_id
         }
       }
     }

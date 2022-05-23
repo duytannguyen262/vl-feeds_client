@@ -208,6 +208,7 @@ const GET_USERS = gql`
       email
       avatar {
         url
+        public_id
       }
       role
       createdAt

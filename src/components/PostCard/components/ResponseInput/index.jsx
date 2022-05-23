@@ -113,6 +113,7 @@ const CREATE_COMMENT_MUTATION = gql`
           username
           avatar {
             url
+            public_id
           }
         }
       }
@@ -133,6 +134,7 @@ const CREATE_ANSWER_MUTATION = gql`
           username
           avatar {
             url
+            public_id
           }
         }
       }

@@ -24,6 +24,7 @@ import DeletePost from "./components/DeletePost";
 import ResponseInput from "./components/ResponseInput";
 import VoteButtons from "./components/VoteButtons";
 import "./styles.scss";
+import GradeBtn from "./components/GradeBtn";
 
 const PostCard = (props) => {
   const {
@@ -35,11 +36,10 @@ const PostCard = (props) => {
     commentCount,
     answers,
     pictures,
+    points,
   } = props.post;
   const getUserFollowedPosts = useQuery(FETCH_FOLLOWED_POSTS);
-
   const user = useSelector((state) => state.auth.user);
-
   const [isCommentsOpen, setIsCommentsOpen] = useState(false);
   const [isAnswersOpen, setIsAnswersOpen] = useState(false);
   const openComments = () => {
@@ -116,38 +116,44 @@ const PostCard = (props) => {
 
   return (
     <div className="postCard">
-      {user && (
-        <Tooltip title="Lưu" placement="right">
-          <div className="postCard-follow" onClick={handleFollow}>
-            <img
-              src={isFollowed() ? filledFollowIcon : followIcon}
-              alt=""
-              className="postCard-follow_icon"
-            />
-          </div>
-        </Tooltip>
-      )}
       <div className="postCard-inner">
         <div className="postCard-votes">
           <VoteButtons {...props} user={user} />
+          {user && (
+            <Tooltip title="Lưu" placement="right">
+              <div className="postCard-follow" onClick={handleFollow}>
+                <img
+                  src={isFollowed() ? filledFollowIcon : followIcon}
+                  alt=""
+                  className="postCard-follow_icon"
+                />
+              </div>
+            </Tooltip>
+          )}
           {user &&
             (user.username === author.username || user.role === "admin") && (
               <DeletePost postId={id} />
             )}
         </div>
         <div className="postCard-content">
-          <div className="postCard-content_header" onClick={handleUserClick}>
-            <img src={author.avatar.url ? author.avatar.url : userImg} alt="" />
-            <div className="postCard-content_header--userInfo">
-              <p className="authorName">{author.username}</p>
-              <span
-                style={{ backgroundColor: roleColor(author.role) }}
-                className="authorRole"
-              >
-                {roleProp(author.role)}
-              </span>
-              <p className="postDate">{moment(createdAt).fromNow()}</p>
+          <div className="postCard-content_topRow">
+            <div className="postCard-content_header" onClick={handleUserClick}>
+              <img
+                src={author.avatar.url ? author.avatar.url : userImg}
+                alt=""
+              />
+              <div className="postCard-content_header--userInfo">
+                <p className="authorName">{author.username}</p>
+                <span
+                  style={{ backgroundColor: roleColor(author.role) }}
+                  className="authorRole"
+                >
+                  {roleProp(author.role)}
+                </span>
+                <p className="postDate">{moment(createdAt).fromNow()}</p>
+              </div>
             </div>
+            {user && <GradeBtn points={points} user={user} postId={id} />}
           </div>
           <div className="postCard-content_body">
             <p>

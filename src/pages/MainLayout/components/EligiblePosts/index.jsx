@@ -44,9 +44,11 @@ const Home = () => {
       ) : (
         <div style={{ width: "100%" }}>
           {data.posts &&
-            eligiblePosts.map((post) => {
-              return <PostCard post={post} key={post.id} />;
-            })}
+            eligiblePosts
+              .filter((post) => post.author !== null)
+              .map((post) => {
+                return <PostCard post={post} key={post.id} />;
+              })}
           {!loading && eligiblePosts.length === 0 && (
             <div className="notFollowed-info">
               <p>Có vẻ như chưa có bài góp ý nào đủ điều kiện cả</p>

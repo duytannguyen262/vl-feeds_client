@@ -43,37 +43,49 @@ const Comments = ({ isCommentsOpen, postId }) => {
           setCommentId(comment.id);
           setOpen(true);
         };
-
         return (
           <div key={comment.id}>
             <div className="comment">
               <img
                 src={
-                  comment.author.avatar.url
+                  comment.author && comment.author.avatar.url
                     ? comment.author.avatar.url
                     : userImg
                 }
                 alt=""
-                onClick={() => navigate(`/user/${comment.author.id}`)}
+                onClick={() =>
+                  comment.author && navigate(`/user/${comment.author.id}`)
+                }
               />
               <div className="comment_info">
                 <div className="comment_header">
-                  <p className="username">{comment.author.username}</p>
+                  <p className="username">
+                    {comment.author ? comment.author.username : "Ẩn danh"}
+                  </p>
                   <p className="date">{moment(comment.createdAt).fromNow()}</p>
                 </div>
-                <div className="comment_body">{comment.body}</div>
-                {user && user.username === comment.author.username && (
-                  <Tooltip title="Xóa bình luận" placement="right">
-                    <IconButton
-                      className="comment_trash"
-                      aria-label="delete"
-                      size="small"
-                      onClick={handleOpen}
-                    >
-                      <img src={trashIcon} alt="" />
-                    </IconButton>
-                  </Tooltip>
-                )}
+                <div
+                  style={{
+                    fontStyle: !comment.author && "italic",
+                  }}
+                  className="comment_body"
+                >
+                  {comment.author ? comment.body : "Bình luận này đã bị ẩn"}
+                </div>
+                {user &&
+                  comment.author &&
+                  user.username === comment.author.username && (
+                    <Tooltip title="Xóa bình luận" placement="right">
+                      <IconButton
+                        className="comment_trash"
+                        aria-label="delete"
+                        size="small"
+                        onClick={handleOpen}
+                      >
+                        <img src={trashIcon} alt="" />
+                      </IconButton>
+                    </Tooltip>
+                  )}
               </div>
             </div>
           </div>

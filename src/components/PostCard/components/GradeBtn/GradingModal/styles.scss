@@ -1,0 +1,18 @@
+.grading-modal {
+  padding: 50px;
+  background-color: transparent;
+
+  &-header {
+    & h1 {
+      font-weight: 500;
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+    }
+  }
+
+  &-footer {
+    & button {
+      border-radius: 10px !important;
+    }
+  }
+}
