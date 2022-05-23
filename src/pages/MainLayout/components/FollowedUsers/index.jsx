@@ -104,6 +104,11 @@ const FETCH_USER_POSTS = gql`
           }
         }
       }
+      points {
+        username
+        createdAt
+        point
+      }
     }
   }
 `;

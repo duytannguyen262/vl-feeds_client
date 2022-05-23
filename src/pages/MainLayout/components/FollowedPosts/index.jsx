@@ -92,6 +92,11 @@ const FETCH_FOLLOWED_POSTS = gql`
             username
           }
         }
+        points {
+          username
+          createdAt
+          point
+        }
       }
     }
   }
