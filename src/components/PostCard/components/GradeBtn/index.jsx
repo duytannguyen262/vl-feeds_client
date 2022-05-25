@@ -2,13 +2,27 @@ import React, { useState } from "react";
 import { Button, Tooltip } from "@mui/material";
 import Zoom from "@mui/material/Zoom";
 
-import gradeBtn from "../../../../assets/icons/medal 1.svg";
+import goldMedalBtn from "../../../../assets/icons/medal 1.svg";
+import silverMedalBtn from "../../../../assets/icons/silver-medal.svg";
+import trophyBtn from "../../../../assets/icons/trophy.svg";
 import grayGradeBtn from "../../../../assets/icons/medal 1 gray.svg";
 
 import "./styles.scss";
 import { useModal } from "@nextui-org/react";
 import GradingModal from "./GradingModal";
 
+const imgSrcDependsOnPoints = (averagePoints) => {
+  if (averagePoints > 5 && averagePoints <= 7) {
+    return silverMedalBtn;
+  }
+  if (averagePoints > 7 && averagePoints < 9) {
+    return goldMedalBtn;
+  }
+  if (averagePoints >= 9 && averagePoints <= 10) {
+    return trophyBtn;
+  }
+  return grayGradeBtn;
+};
 const GradeBtn = ({ points, user, postId }) => {
   const { setVisible, bindings } = useModal();
   const [averagePoint, setAveragePoint] = useState(0);
@@ -44,7 +58,11 @@ const GradeBtn = ({ points, user, postId }) => {
         >
           {averagePoint > 0 ? (
             <>
-              <img src={gradeBtn} alt="grade-btn" />
+              <img
+                style={{ marginRight: "5px" }}
+                src={imgSrcDependsOnPoints(averagePoint)}
+                alt="grade-btn"
+              />
               <span>{averagePoint}</span>
             </>
           ) : (

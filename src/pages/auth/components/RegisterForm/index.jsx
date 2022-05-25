@@ -43,6 +43,7 @@ const RegisterForm = () => {
   const [addUser, { loading }] = useMutation(REGISTER_USER, {
     update() {
       setVisible(true);
+      console.log("chcek");
       setValues({
         userName: "",
         email: "",
@@ -52,6 +53,8 @@ const RegisterForm = () => {
       setErrors({});
     },
     onError(err) {
+      console.log("err", err);
+
       setErrors(err.graphQLErrors[0].extensions.errors);
     },
   });

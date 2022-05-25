@@ -8,6 +8,7 @@ import userImg from "../../../../../../assets/user.png";
 import trashIcon from "../../../../../../assets/icons/trash.svg";
 import "./usersTable.scss";
 import { Button, FormControl, MenuItem, Select } from "@mui/material";
+import { Modal, Text, useModal } from "@nextui-org/react";
 
 export default function DataTable() {
   const { refetch, data, loading } = useQuery(GET_USERS);
@@ -124,9 +125,10 @@ export default function DataTable() {
       ids: selectedRowIds,
     },
   });
-  const handleDeleteSelected = () => {
-    deleteUsers();
-    refetch();
+
+  const { setVisible, bindings } = useModal();
+  const handleOpenModal = () => {
+    setVisible(true);
   };
 
   const [changeUsersRole] = useMutation(CHANGE_USERS_ROLE, {
@@ -147,12 +149,38 @@ export default function DataTable() {
     <div style={{ height: 800, width: "100%" }}>
       {selectedRowIds.length > 0 && (
         <div className="deleteSelected">
-          <Button onClick={handleDeleteSelected}>
+          <Button onClick={handleOpenModal}>
             <img src={trashIcon} alt="" />
             <span>Xóa người dùng đã chọn</span>
           </Button>
         </div>
       )}
+      <Modal closeButton {...bindings}>
+        <Modal.Header>
+          <Text b size={18}>
+            Thông báo
+          </Text>
+        </Modal.Header>
+        <Modal.Body>Bạn chắc chắn muốn xóa những người dùng này?</Modal.Body>
+        <Modal.Footer>
+          <Button
+            onClick={async () => {
+              await deleteUsers();
+              await refetch();
+              setSelectedRowIs([]);
+              setVisible(false);
+            }}
+            className="modal-deleteBtn"
+            variant="contained"
+            sx={{ backgroundColor: "#ff4546", marginRight: "10px" }}
+          >
+            Xóa
+          </Button>
+          <Button variant="outlined" onClick={() => setVisible(false)}>
+            Hủy
+          </Button>
+        </Modal.Footer>
+      </Modal>
       {toUpdateUserRows.length > 0 && (
         <div className="updateRole">
           {toUpdateUserRows.map((user) => {

@@ -306,6 +306,9 @@ const CREATE_POST_MUTATION = gql`
           }
         }
       }
+      points {
+        username
+      }
     }
   }
 `;

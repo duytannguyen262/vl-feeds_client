@@ -48,3 +48,9 @@
   margin-bottom: 20px;
   border-radius: 10px;
 }
+
+.modal-deleteBtn {
+  &:hover {
+    background-color: #ff4546 !important;
+  }
+}
