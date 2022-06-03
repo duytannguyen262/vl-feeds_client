@@ -33,7 +33,8 @@ const RegisterForm = () => {
     email: Yup.string()
       .min(3, "Email phải có ít nhất 3 ký tự")
       .email("Email không hợp lệ")
-      .required("Email không được để trống"),
+      .required("Email không được để trống")
+      .matches(/vanlanguni/g, "Chỉ được sử dụng email do trường cấp"),
     password: Yup.string().required("Mật khẩu không được để trống"),
     confirmPassword: Yup.string().when("password", {
       is: (val) => (val && val.length > 0 ? true : false),
@@ -43,7 +44,6 @@ const RegisterForm = () => {
   const [addUser, { loading }] = useMutation(REGISTER_USER, {
     update() {
       setVisible(true);
-      console.log("chcek");
       setValues({
         userName: "",
         email: "",
@@ -53,17 +53,14 @@ const RegisterForm = () => {
       setErrors({});
     },
     onError(err) {
-      console.log("err", err);
-
       setErrors(err.graphQLErrors[0].extensions.errors);
     },
   });
 
-  const submitForm = async (newValues, resetForm) => {
+  const submitForm = async (newValues) => {
     await addUser({
       variables: newValues,
     });
-    Object.keys(errors).length === 0 && resetForm();
   };
 
   return (
@@ -92,7 +89,7 @@ const RegisterForm = () => {
           initialValues={values}
           validationSchema={validate}
           onSubmit={(values, { resetForm }) => {
-            submitForm(values, resetForm);
+            submitForm(values);
           }}
         >
           {(formik) => {
