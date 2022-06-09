@@ -1,7 +1,7 @@
 # Usage
 Please login into application to fully experience the app! \
 demo username: demo \
-demo password: 123 \
+demo password: 123
 
 # Getting Started with Create React App
 
