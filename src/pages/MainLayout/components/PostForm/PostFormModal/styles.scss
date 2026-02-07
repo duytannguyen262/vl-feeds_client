@@ -99,4 +99,14 @@
       flex: 1;
     }
   }
+
+  &-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+
+  &-secondary {
+    width: 100%;
+  }
 }

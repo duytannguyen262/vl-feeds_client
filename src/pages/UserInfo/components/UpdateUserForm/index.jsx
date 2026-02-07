@@ -1,5 +1,4 @@
 import { useMutation, useQuery } from "@apollo/client";
-import * as Yup from "yup";
 import { Button, IconButton } from "@mui/material";
 import { FastField, Form, Formik } from "formik";
 import { styled } from "@mui/material/styles";
@@ -53,13 +52,6 @@ const UpdateUserForm = () => {
     return () => toast.dismiss();
   }, [data]);
 
-  const validate = Yup.object({
-    confirmNewPassword: Yup.string().when("password", {
-      is: (val) => (val && val.length > 0 ? true : false),
-      then: Yup.string().oneOf([Yup.ref("password")], "Mật khẩu không khớp"),
-    }),
-  });
-
   const [uploadFile] = useMutation(UPLOAD_IMG, {
     onCompleted: (data) => {
       const action = updateUser(data.uploadUserImg);
@@ -70,6 +62,17 @@ const UpdateUserForm = () => {
   const [changePassword] = useMutation(CHANGE_PASSWORD, {
     onError(err) {
       toast.error(err.graphQLErrors[0].message, {
+        position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    },
+    onCompleted: (data) => {
+      toast.success("Cập nhật thành công!", {
         position: "bottom-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -90,8 +93,8 @@ const UpdateUserForm = () => {
       (banner && banner.type && banner.type.match("image.*"))
     ) {
       setIsLoading(true);
-      const cloudName = process.env.REACT_APP_CLOUD_NAME;
-      const apiKey = process.env.REACT_APP_API_KEY;
+      const cloudName = import.meta.env.VITE_CLOUD_NAME;
+      const apiKey = import.meta.env.VITE_API_KEY;
       const uploadPreset = "profile_upload";
       const upload = async (file) => {
         if (!file.url) {
@@ -105,7 +108,7 @@ const UpdateUserForm = () => {
             formData,
             {
               headers: { "X-Requested-With": "XMLHttpRequest" },
-            }
+            },
           );
           const data = response.data;
           const fileURL = data.secure_url;
@@ -150,16 +153,6 @@ const UpdateUserForm = () => {
         },
       });
     }
-
-    toast.success("Cập nhật thành công!", {
-      position: "bottom-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
   };
   return (
     <>
@@ -179,7 +172,6 @@ const UpdateUserForm = () => {
           newPassword: "",
           confirmNewPassword: "",
         }}
-        validationSchema={validate}
         onSubmit={(values, { resetForm }) => {
           handleSubmit(values);
           resetForm();

@@ -24,7 +24,9 @@ const RegisterButton = styled(Button)({
   "&:hover": {
     background: "#fe4445",
   },
+  borderRadius: "8px",
 });
+
 const TopBar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const user = useSelector((state) => state.auth.user);

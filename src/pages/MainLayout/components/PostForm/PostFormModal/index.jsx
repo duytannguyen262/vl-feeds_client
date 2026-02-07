@@ -7,7 +7,7 @@ import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import { Spinner } from "reactstrap";
 import { useNavigate } from "react-router-dom";
 import Axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 
 import PostInputField from "../../../../../custom-fields/PostInputField";
@@ -76,7 +76,7 @@ const PostFormModal = React.forwardRef((props, ref) => {
     },
   });
 
-  const submitForm = async (newValues) => {
+  const submitForm = async (newValues, isAnonymous = false) => {
     setIsLoading(true);
     const { files } = newValues;
 
@@ -87,9 +87,9 @@ const PostFormModal = React.forwardRef((props, ref) => {
 
     if (isImages) {
       const picturesToUpload = [];
-      const cloudName = process.env.REACT_APP_CLOUD_NAME;
-      const apiKey = process.env.REACT_APP_API_KEY;
-      const uploadPreset = process.env.REACT_APP_UPLOAD_PRESET;
+      const cloudName = import.meta.env.VITE_CLOUD_NAME;
+      const apiKey = import.meta.env.VITE_API_KEY;
+      const uploadPreset = import.meta.env.VITE_UPLOAD_PRESET;
 
       const uploaders = Array.from(files).map((file) => {
         const formData = new FormData();
@@ -102,7 +102,7 @@ const PostFormModal = React.forwardRef((props, ref) => {
           formData,
           {
             headers: { "X-Requested-With": "XMLHttpRequest" },
-          }
+          },
         ).then((response) => {
           const data = response.data;
           const fileURL = data.secure_url;
@@ -117,8 +117,16 @@ const PostFormModal = React.forwardRef((props, ref) => {
             body: newValues.body,
             categories: newValues.categories,
             pictures: picturesToUpload,
+            isAnonymous,
           },
         });
+
+        toast.success("Đăng bài thành công!", {
+          position: "bottom-right",
+          autoClose: 2000,
+          hideProgressBar: true,
+        });
+
         navigate("/");
       });
     } else {
@@ -139,13 +147,12 @@ const PostFormModal = React.forwardRef((props, ref) => {
     setPreviewImages(
       [...previewImages].filter((previewImage) => {
         return previewImage.name !== image.name;
-      })
+      }),
     );
   };
 
   return (
     <Box sx={style} className="postForm_modal" open={open}>
-      <ToastContainer />
       <div className="postForm_modal-close">
         <Button onClick={handleClose}>
           <img src={crossIcon} alt="" />
@@ -207,7 +214,7 @@ const PostFormModal = React.forwardRef((props, ref) => {
                             "files",
                             [...values.files].filter((file) => {
                               return file.name !== image.name;
-                            })
+                            }),
                           );
                         }}
                         className="postForm_modal-image_list_item"
@@ -228,17 +235,31 @@ const PostFormModal = React.forwardRef((props, ref) => {
                   type="text"
                 />
 
-                <Button
-                  className="btn login-btn mt-4"
-                  type="submit"
-                  disabled={!values.body.trim() || loading || isLoading}
-                >
-                  {loading || isLoading ? (
-                    <Spinner style={{ color: "white" }} />
-                  ) : (
-                    "Đăng"
-                  )}
-                </Button>
+                <div className="postForm_modal-actions">
+                  <Button
+                    className="btn mt-4 postForm_modal-secondary"
+                    disabled={!values.body.trim() || loading || isLoading}
+                    onClick={() => submitForm(values, true)}
+                  >
+                    {loading || isLoading ? (
+                      <Spinner style={{ color: "white" }} />
+                    ) : (
+                      "Đăng ẩn danh"
+                    )}
+                  </Button>
+
+                  <Button
+                    className="btn login-btn mt-4"
+                    disabled={!values.body.trim() || loading || isLoading}
+                    onClick={() => submitForm(values, false)}
+                  >
+                    {loading || isLoading ? (
+                      <Spinner style={{ color: "white" }} />
+                    ) : (
+                      "Đăng"
+                    )}
+                  </Button>
+                </div>
               </Form>
             );
           }}
@@ -253,11 +274,18 @@ const CREATE_POST_MUTATION = gql`
     $body: String!
     $categories: [String!]
     $pictures: [ImageInputs!]
+    $isAnonymous: Boolean
   ) {
-    createPost(body: $body, categories: $categories, pictures: $pictures) {
+    createPost(
+      body: $body
+      categories: $categories
+      pictures: $pictures
+      isAnonymous: $isAnonymous
+    ) {
       id
       body
       createdAt
+      isAnonymous
       author {
         id
         username

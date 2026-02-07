@@ -23,7 +23,7 @@ const Home = () => {
       const posts = data.posts.edges
         .map((edge) => edge.node)
         .filter(
-          (post) => post.reputationsCount >= 20 && post.answers.length === 0
+          (post) => post.reputationsCount >= 2 && post.answers.length === 0
         );
       setEligiblePosts(posts);
     }

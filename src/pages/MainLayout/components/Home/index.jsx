@@ -41,7 +41,7 @@ const Home = () => {
                   .replace(/[\u0300-\u036f]/g, "")
                   .replace(/đ/g, "d")
                   .replace(/Đ/g, "D")
-                  .toLowerCase()
+                  .toLowerCase(),
               );
           });
         });
@@ -61,6 +61,7 @@ const Home = () => {
       },
     });
   };
+
   return (
     <div className="page-content">
       {user && <PostForm />}
@@ -72,11 +73,9 @@ const Home = () => {
       ) : (
         <div>
           {posts.length > 0 &&
-            posts
-              .filter((post) => post.author !== null)
-              .map((post) => {
-                return <PostCard post={post} key={post.id} />;
-              })}
+            posts.map((post) => {
+              return <PostCard post={post} key={post.id} />;
+            })}
           {posts.length > 0 && data.posts.pageInfo.hasNextPage && (
             <div className="d-flex justify-content-center">
               <Button sx={{ padding: "10px 20px", color: "#666666be" }}>

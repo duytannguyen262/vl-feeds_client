@@ -4,15 +4,15 @@
   justify-content: center;
   flex-direction: column;
 
-  background-color: rgb(255, 69, 70, 0.8);
-  box-shadow: 0 4px 14px rgb(255, 69, 70, 0.3);
+  background-color: #f6fafd;
+  box-shadow: 0 6px 18px 0 rgba(32, 32, 149, 0.102);
+
   border-radius: 20px;
   margin-bottom: 20px;
 
-  padding: 20px 0;
+  padding: 15px 0;
   &-header {
     & h1 {
-      color: #fff;
       font-weight: 500;
       font-size: 1.2rem;
       margin-bottom: 20px;

@@ -13,8 +13,8 @@ import { Modal, useModal } from "@nextui-org/react";
 import filledFollowIcon from "../../assets/icons/bookmark-filled.svg";
 import arrowIcon from "../../assets/icons/angle-right-for-slide.svg";
 import followIcon from "../../assets/icons/bookmark.svg";
-import answerIcon from "../../assets/icons/comment-check.svg";
-import commentIcon from "../../assets/icons/comment.svg";
+import answerIcon from "../../assets/icons/green-shield-check.svg";
+import commentIcon from "../../assets/icons/gray-paper-plane.svg";
 import userImg from "../../assets/user.png";
 import { chipColor } from "../../constants/chipColor";
 import { roleColor, roleProp } from "../../constants/role";
@@ -111,7 +111,8 @@ const PostCard = (props) => {
 
   const navigate = useNavigate();
   const handleUserClick = () => {
-    navigate(`/user/${author.id}`);
+    if (!author) return;
+    navigate(`/user/${author?.id}`);
   };
 
   return (
@@ -131,7 +132,7 @@ const PostCard = (props) => {
             </Tooltip>
           )}
           {user &&
-            (user.username === author.username || user.role === "admin") && (
+            (user.username === author?.username || user.role === "admin") && (
               <DeletePost postId={id} />
             )}
         </div>
@@ -139,17 +140,19 @@ const PostCard = (props) => {
           <div className="postCard-content_topRow">
             <div className="postCard-content_header" onClick={handleUserClick}>
               <img
-                src={author.avatar.url ? author.avatar.url : userImg}
+                src={author?.avatar?.url ? author?.avatar?.url : userImg}
                 alt=""
               />
               <div className="postCard-content_header--userInfo">
-                <p className="authorName">{author.username}</p>
-                <span
-                  style={{ backgroundColor: roleColor(author.role) }}
-                  className="authorRole"
-                >
-                  {roleProp(author.role)}
-                </span>
+                <p className="authorName">{author?.username ?? "Ẩn Danh"}</p>
+                {author && (
+                  <span
+                    style={{ backgroundColor: roleColor(author.role) }}
+                    className="authorRole"
+                  >
+                    {roleProp(author.role)}
+                  </span>
+                )}
                 <p className="postDate">{moment(createdAt).fromNow()}</p>
               </div>
             </div>
@@ -237,7 +240,7 @@ const PostCard = (props) => {
           <Comments
             postId={id}
             isCommentsOpen={isCommentsOpen}
-            username={author.username}
+            username={author?.username}
           />
         </TabPane>
         <TabPane tabId="2">
@@ -245,7 +248,7 @@ const PostCard = (props) => {
             postId={id}
             isAnswersOpen={isAnswersOpen}
             answers={answers}
-            username={author.username}
+            username={author?.username}
           />
         </TabPane>
       </TabContent>

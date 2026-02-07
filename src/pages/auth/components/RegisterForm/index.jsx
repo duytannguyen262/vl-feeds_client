@@ -33,8 +33,7 @@ const RegisterForm = () => {
     email: Yup.string()
       .min(3, "Email phải có ít nhất 3 ký tự")
       .email("Email không hợp lệ")
-      .required("Email không được để trống")
-      .matches(/vanlanguni/g, "Chỉ được sử dụng email do trường cấp"),
+      .required("Email không được để trống"),
     password: Yup.string().required("Mật khẩu không được để trống"),
     confirmPassword: Yup.string().when("password", {
       is: (val) => (val && val.length > 0 ? true : false),
